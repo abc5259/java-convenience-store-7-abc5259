@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-public class ProductTest {
+class ProductTest {
 
     @Test
     void 상품은_이름_가격_프로모션으로_이루어져_있다() {
