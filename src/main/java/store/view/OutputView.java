@@ -6,7 +6,7 @@ import store.domain.ProductPromotion;
 import store.domain.Store;
 
 public class OutputView {
-    private static final String NON_PROMOTION_PRODUCT_INFO_FORMAT = "- %s %,d원 %s%n";
+    private static final String PRODUCT_INFO_FORMAT = "- %s %,d원 %s%n";
     private static final String PROMOTION_PRODUCT_INFO_FORMAT = "- %s %,d원 %s %s%n";
 
     public void printStartMessage() {
@@ -26,7 +26,7 @@ public class OutputView {
                     makeProductQuantityFormat(productPromotion.getQuantity()),
                     productPromotion.getPromotionName());
         }
-        System.out.printf(NON_PROMOTION_PRODUCT_INFO_FORMAT,
+        System.out.printf(PRODUCT_INFO_FORMAT,
                 product.getName(),
                 product.getPrice(),
                 makeProductQuantityFormat(product.getQuantity()));

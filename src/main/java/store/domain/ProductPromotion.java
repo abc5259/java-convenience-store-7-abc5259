@@ -1,5 +1,7 @@
 package store.domain;
 
+import camp.nextstep.edu.missionutils.DateTimes;
+
 public class ProductPromotion {
     private final Product product;
     private final Promotion promotion;
@@ -10,6 +12,23 @@ public class ProductPromotion {
         this.promotion = promotion;
         this.quantity = quantity;
     }
+
+    public void validatePurchaseQuantity(int purchaseQuantity) {
+        product.validatePurchaseQuantity(purchaseQuantity - this.quantity);
+    }
+
+    public boolean isNotApplicablePromotion() {
+        return !promotion.isApplicable(DateTimes.now().toLocalDate());
+    }
+
+    public int calculatePromotionProduct(int purchaseQuantity) {
+        if (isNotApplicablePromotion()) {
+            return 0;
+        }
+
+
+    }
+
 
     public String getPromotionName() {
         return promotion.getName();
@@ -26,9 +45,5 @@ public class ProductPromotion {
                 ", promotion=" + promotion +
                 ", quantity=" + quantity +
                 '}';
-    }
-
-    public void validatePurchaseQuantity(int count) {
-        product.validatePurchaseQuantity(count - this.quantity);
     }
 }

@@ -23,17 +23,6 @@ public class Product {
         }
     }
 
-    public boolean isSameName(OrderItem orderItem) {
-        return name.equals(orderItem.getName());
-    }
-
-    public void reduceQuantity(OrderItem orderItem) {
-        int count = orderItem.getCount();
-
-        orderItem.decreaseCount(this.quantity);
-        this.quantity = Math.max(0, this.quantity - count);
-    }
-
     public void increaseQuantity(int quantity) {
         this.quantity += quantity;
     }
