@@ -15,9 +15,7 @@ public class OutputView {
 
     public void printProducts(Store store) {
         List<Product> products = store.getProducts();
-        products.forEach(product -> {
-            printProduct(product, store.getProductPromotion(product));
-        });
+        products.forEach(product -> printProduct(product, store.getProductPromotion(product)));
     }
 
     private void printProduct(Product product, ProductPromotion productPromotion) {

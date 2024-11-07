@@ -7,23 +7,23 @@ public class Promotion {
     private String name;
     private int buyCount;
     private int getCount;
-    private LocalDate startTime;
-    private LocalDate endTime;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
-    public Promotion(String name, int buyCount, int getCount, LocalDate startTime, LocalDate endTime) {
+    public Promotion(String name, int buyCount, int getCount, LocalDate startDate, LocalDate endDate) {
         this.name = name;
         this.buyCount = buyCount;
         this.getCount = getCount;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
-    public boolean isApplicable(LocalDate currentDate, int count) {
-        if (currentDate.isBefore(startTime) || currentDate.isAfter(endTime)) {
-            return false;
-        }
+    public boolean isApplicable(LocalDate currentDate) {
+        return isInDate(currentDate);
+    }
 
-        return true;
+    private boolean isInDate(LocalDate targetDate) {
+        return !targetDate.isBefore(startDate) && !targetDate.isAfter(endDate);
     }
 
     public String getName() {
@@ -36,8 +36,8 @@ public class Promotion {
                 "name='" + name + '\'' +
                 ", buyCount=" + buyCount +
                 ", getCount=" + getCount +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
                 '}';
     }
 }

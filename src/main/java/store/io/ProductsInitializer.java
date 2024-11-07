@@ -17,6 +17,7 @@ public class ProductsInitializer {
     private static final Path PRODUCT_PATH = Path.of("src/main/resources/products.md");
 
     public Store initialize(Map<String, Promotion> promotions) {
+        //TODO: 함수 10줄로 줄이기
         List<String> productInfoLines = readAllProductInfoLines();
 
         Map<String, Product> products = new LinkedHashMap<>();
@@ -41,7 +42,7 @@ public class ProductsInitializer {
                 products.put(productName, product);
             }
         }
-        
+
         return new Store(products, productPromotions);
     }
 

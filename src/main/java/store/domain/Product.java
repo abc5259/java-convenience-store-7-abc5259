@@ -38,6 +38,12 @@ public class Product {
         this.quantity += quantity;
     }
 
+    public void validatePurchaseQuantity(int count) {
+        if (this.quantity < count) {
+            throw new IllegalArgumentException("재고가 부족합니다.");
+        }
+    }
+
     public int getQuantity() {
         return quantity;
     }
