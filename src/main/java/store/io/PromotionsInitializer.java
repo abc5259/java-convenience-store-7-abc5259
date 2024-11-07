@@ -14,7 +14,7 @@ public class PromotionsInitializer {
 
     private static final Path PRODUCT_PATH = Path.of("src/main/resources/promotions.md");
 
-    public Map<String, Promotion> initialize() throws IOException {
+    public Map<String, Promotion> initialize() {
         List<String> promotionInfoLines = readAllPromotionInfoLines();
         return promotionInfoLines.stream()
                 .map(line -> line.split(","))
@@ -31,8 +31,13 @@ public class PromotionsInitializer {
                 ));
     }
 
-    private List<String> readAllPromotionInfoLines() throws IOException {
-        List<String> lines = Files.readAllLines(PRODUCT_PATH, StandardCharsets.UTF_8);
+    private List<String> readAllPromotionInfoLines() {
+        List<String> lines;
+        try {
+            lines = Files.readAllLines(PRODUCT_PATH, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         lines.removeFirst(); // 첫 컬럼명 제거
         return lines;
     }

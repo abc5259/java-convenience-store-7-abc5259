@@ -29,4 +29,15 @@ public class Promotion {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "Promotion{" +
+                "name='" + name + '\'' +
+                ", buyCount=" + buyCount +
+                ", getCount=" + getCount +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                '}';
+    }
 }

@@ -5,14 +5,16 @@ public class Product {
     private final String name;
     private final int price;
     private int quantity;
-    private final Promotion promotion;
 
-    public Product(String name, int price, int quantity, Promotion promotion) {
+    public Product(String name, int price) {
+        this(name, price, 0);
+    }
+
+    public Product(String name, int price, int quantity) {
         validateQuantityIsNegative(quantity);
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        this.promotion = promotion;
     }
 
     private void validateQuantityIsNegative(int quantity) {
@@ -25,19 +27,27 @@ public class Product {
         return name.equals(orderItem.getName());
     }
 
-    public boolean isPromotionProduct() {
-        return this.promotion != null;
+    public void reduceQuantity(OrderItem orderItem) {
+        int count = orderItem.getCount();
+
+        orderItem.decreaseCount(this.quantity);
+        this.quantity = Math.max(0, this.quantity - count);
+    }
+
+    public void increaseQuantity(int quantity) {
+        this.quantity += quantity;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public void reduceQuantity(OrderItem orderItem) {
-        int count = orderItem.getCount();
+    public String getName() {
+        return name;
+    }
 
-        orderItem.decreaseCount(this.quantity);
-        this.quantity = Math.max(0, this.quantity - count);
+    public int getPrice() {
+        return price;
     }
 
     @Override
@@ -46,7 +56,6 @@ public class Product {
                 "name='" + name + '\'' +
                 ", price=" + price +
                 ", quantity=" + quantity +
-                ", promotion=" + (promotion == null ? "null" : promotion.getName()) +
                 '}';
     }
 }
