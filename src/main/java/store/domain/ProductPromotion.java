@@ -22,11 +22,13 @@ public class ProductPromotion {
     }
 
     public int calculatePromotionProduct(int purchaseQuantity) {
+        validatePurchaseQuantity(purchaseQuantity);
+
         if (isNotApplicablePromotion()) {
             return 0;
         }
 
-
+        return 1;
     }
 
 

@@ -30,6 +30,7 @@ public class Promotion {
     public int calculateApplicablePromotionProductQuantity(int promotionProductQuantity, int purchaseQuantity) {
         purchaseQuantity = Math.min(purchaseQuantity, promotionProductQuantity);
         int rest = purchaseQuantity % (buyCount + getCount);
+        System.out.println("rest = " + rest);
         if (rest == 0) {
             return purchaseQuantity; //구매 수량만큼 모두 프로모션 적용 가능 ALL, purchaseQuantity
         }
