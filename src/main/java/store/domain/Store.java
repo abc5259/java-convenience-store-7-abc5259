@@ -12,23 +12,25 @@ public class Store {
         this.products = products;
         this.productPromotions = productPromotions;
     }
-//
-//    public PromotionNoticeResult calculatePromotionNoticeResult(String name, int count) {
-//        validatePurchase(name, count);
-//        Product product = findProductOrElseThrow(name);
-//        ProductPromotion productPromotion = productPromotions.get(product);
-//
-//        if (productPromotion == null || !productPromotion.isNotApplicablePromotion()) {
-//            return PromotionNoticeResult.Good();
-//        }
-//
-//        productPromotion.
-//    }
 
-    public void validatePurchase(String name, int count) {
+    public PromotionNoticeResult calculatePromotionNoticeResult(String name, int purchaseQuantity) {
+        validatePurchase(name, purchaseQuantity);
         Product product = findProductOrElseThrow(name);
         ProductPromotion productPromotion = productPromotions.get(product);
-        validatePurchaseQuantity(count, productPromotion, product);
+
+        if (productPromotion == null || !productPromotion.isNotApplicablePromotion()) {
+            return PromotionNoticeResult.notApply();
+        }
+
+        int applicablePromotionProductQuantity = productPromotion.calculateApplicablePromotionProductQuantity(
+                purchaseQuantity);
+        return PromotionNoticeResult.from(name, purchaseQuantity, applicablePromotionProductQuantity);
+    }
+
+    public void validatePurchase(String name, int purchaseQuantity) {
+        Product product = findProductOrElseThrow(name);
+        ProductPromotion productPromotion = productPromotions.get(product);
+        validatePurchaseQuantity(purchaseQuantity, productPromotion, product);
     }
 
     private Product findProductOrElseThrow(String name) {

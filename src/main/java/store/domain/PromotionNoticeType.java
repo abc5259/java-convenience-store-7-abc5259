@@ -1,5 +1,8 @@
 package store.domain;
 
 public enum PromotionNoticeType {
-    MORE_QUANTITY, NO_APPLY, GOOD
+    EXACT_PROMOTION,
+    MORE_QUANTITY,
+    LESS_QUANTITY,
+    NOT_APPLIED
 }

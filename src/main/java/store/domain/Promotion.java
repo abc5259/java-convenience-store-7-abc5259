@@ -23,21 +23,26 @@ public class Promotion {
     }
 
     /**
-     * @param promotionProductQuantity
-     * @param purchaseQuantity
+     * @param promotionProductQuantity 현재 프로모션 상품 수량
+     * @param purchaseQuantity         구매하기 원하는 상품 수량
      * @return 얼만만큼의 수량이 혜택을 받는지 리턴
      */
     public int calculateApplicablePromotionProductQuantity(int promotionProductQuantity, int purchaseQuantity) {
         purchaseQuantity = Math.min(purchaseQuantity, promotionProductQuantity);
-        int rest = purchaseQuantity % (buyCount + getCount);
-        System.out.println("rest = " + rest);
-        if (rest == 0) {
-            return purchaseQuantity; //구매 수량만큼 모두 프로모션 적용 가능 ALL, purchaseQuantity
+        int remainder = purchaseQuantity % (buyCount + getCount);
+        if (remainder == 0) {
+            return purchaseQuantity;
         }
-        if (rest == buyCount && purchaseQuantity + getCount <= promotionProductQuantity) {
-            return purchaseQuantity + getCount; // 더 들고와 getCount만큼 MORE, purchaseQuantity + getCount
+
+        if (canMorePurchaseQuantity(promotionProductQuantity, purchaseQuantity, remainder)) {
+            return purchaseQuantity + getCount;
         }
-        return purchaseQuantity - rest; // 야 좀 빼야겠는데 다는 못해주겠고 이정도 빼야해 // LITTLE, purchaseQuantity - rest
+
+        return purchaseQuantity - remainder;
+    }
+
+    private boolean canMorePurchaseQuantity(int promotionProductQuantity, int purchaseQuantity, int remainder) {
+        return remainder == buyCount && purchaseQuantity + getCount <= promotionProductQuantity;
     }
 
     private boolean isInDate(LocalDate targetDate) {

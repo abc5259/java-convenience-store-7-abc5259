@@ -21,14 +21,14 @@ public class ProductPromotion {
         return !promotion.isApplicable(DateTimes.now().toLocalDate());
     }
 
-    public int calculatePromotionProduct(int purchaseQuantity) {
+    public int calculateApplicablePromotionProductQuantity(int purchaseQuantity) {
         validatePurchaseQuantity(purchaseQuantity);
 
         if (isNotApplicablePromotion()) {
             return 0;
         }
 
-        return 1;
+        return promotion.calculateApplicablePromotionProductQuantity(this.quantity, purchaseQuantity);
     }
 
 
