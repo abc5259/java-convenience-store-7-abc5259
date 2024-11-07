@@ -42,7 +42,7 @@ class PromotionTest {
         Assertions.assertThat(result).isEqualTo(applicablePromotionProductQuantity);
     }
 
-    private static Promotion create_Buy_N_Free_Count_Promotion(int buyCount, int getCount) {
+    private Promotion create_Buy_N_Free_Count_Promotion(int buyCount, int getCount) {
         LocalDate currDate = DateTimes.now().toLocalDate();
         LocalDate startDate = currDate.minusDays(1);
         LocalDate endDate = currDate.plusDays(1);

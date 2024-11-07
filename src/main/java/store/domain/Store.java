@@ -18,8 +18,8 @@ public class Store {
         Product product = findProductOrElseThrow(name);
         ProductPromotion productPromotion = productPromotions.get(product);
 
-        if (productPromotion == null || !productPromotion.isNotApplicablePromotion()) {
-            return PromotionNoticeResult.notApply();
+        if (productPromotion == null || productPromotion.isNotApplicablePromotion()) {
+            return PromotionNoticeResult.notApplyPromotion(name);
         }
 
         int applicablePromotionProductQuantity = productPromotion.calculateApplicablePromotionProductQuantity(

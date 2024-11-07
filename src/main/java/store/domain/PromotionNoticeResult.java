@@ -1,9 +1,9 @@
 package store.domain;
 
 import static store.domain.PromotionNoticeType.EXACT_PROMOTION;
-import static store.domain.PromotionNoticeType.LESS_QUANTITY;
 import static store.domain.PromotionNoticeType.MORE_QUANTITY;
-import static store.domain.PromotionNoticeType.NOT_APPLIED;
+import static store.domain.PromotionNoticeType.NOT_APPLIED_PROMOTION;
+import static store.domain.PromotionNoticeType.NOT_APPLIED_QUANTITY;
 
 public record PromotionNoticeResult(
         PromotionNoticeType type,
@@ -11,8 +11,8 @@ public record PromotionNoticeResult(
         int productQuantity
 ) {
 
-    public static PromotionNoticeResult notApply() {
-        return new PromotionNoticeResult(NOT_APPLIED, null, 0);
+    public static PromotionNoticeResult notApplyPromotion(String name) {
+        return new PromotionNoticeResult(NOT_APPLIED_PROMOTION, name, 0);
     }
 
     public static PromotionNoticeResult from(String name,
@@ -27,7 +27,7 @@ public record PromotionNoticeResult(
                     applicablePromotionProductQuantity - purchaseQuantity);
         }
 
-        return new PromotionNoticeResult(LESS_QUANTITY, name,
+        return new PromotionNoticeResult(NOT_APPLIED_QUANTITY, name,
                 purchaseQuantity - applicablePromotionProductQuantity);
     }
 }
