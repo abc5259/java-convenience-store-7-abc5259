@@ -29,10 +29,6 @@ public class ProductPromotion {
     }
 
     public void validatePurchaseQuantity(int count) {
-        if (this.quantity < count) {
-            throw new IllegalArgumentException("재고가 부족합니다.");
-        }
-        
         product.validatePurchaseQuantity(count - this.quantity);
     }
 }
