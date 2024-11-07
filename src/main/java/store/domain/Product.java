@@ -35,8 +35,18 @@ public class Product {
 
     public void reduceQuantity(OrderItem orderItem) {
         int count = orderItem.getCount();
-        
+
         orderItem.decreaseCount(this.quantity);
         this.quantity = Math.max(0, this.quantity - count);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", promotion=" + (promotion == null ? "null" : promotion.getName()) +
+                '}';
     }
 }

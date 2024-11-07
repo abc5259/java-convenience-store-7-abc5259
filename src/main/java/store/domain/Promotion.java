@@ -10,11 +10,23 @@ public class Promotion {
     private LocalDate startTime;
     private LocalDate endTime;
 
+    public Promotion(String name, int buyCount, int getCount, LocalDate startTime, LocalDate endTime) {
+        this.name = name;
+        this.buyCount = buyCount;
+        this.getCount = getCount;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     public boolean isApplicable(LocalDate currentDate, int count) {
         if (currentDate.isBefore(startTime) || currentDate.isAfter(endTime)) {
             return false;
         }
 
         return true;
+    }
+
+    public String getName() {
+        return name;
     }
 }
