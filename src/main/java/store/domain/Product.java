@@ -1,5 +1,7 @@
 package store.domain;
 
+import store.exception.NotEnoughQuantityException;
+
 public class Product {
 
     private final String name;
@@ -29,7 +31,7 @@ public class Product {
 
     public void validatePurchaseQuantity(int count) {
         if (this.quantity < count) {
-            throw new IllegalArgumentException("재고가 부족합니다.");
+            throw new NotEnoughQuantityException();
         }
     }
 

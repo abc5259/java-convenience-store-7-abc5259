@@ -11,6 +11,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import store.exception.NotEnoughQuantityException;
 
 class StoreTest {
 
@@ -32,15 +33,14 @@ class StoreTest {
     void 구매_수량이_재고_수량을_초과한_경우_예외가_발생한다() {
         //given
         Product product = new Product("콜라", 1000, 10);
-        Promotion promotion = new Promotion("2+1", 2, 1, LocalDate.now(), LocalDate.now());
+        Promotion promotion = new Promotion("2+1", 2, 1, LocalDate.now().minusDays(1), LocalDate.now().plusDays(1));
         ProductPromotion productPromotion = new ProductPromotion(product, promotion, 3);
 
         Store store = new Store(Map.of("콜라", product), Map.of(product, productPromotion));
 
         //when //then
-        assertThatThrownBy(() -> store.validatePurchase("콜라", 13))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("재고가 부족합니다.");
+        assertThatThrownBy(() -> store.validatePurchase("콜라", 14))
+                .isInstanceOf(NotEnoughQuantityException.class);
     }
 
     @Test

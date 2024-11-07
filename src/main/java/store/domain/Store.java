@@ -2,6 +2,7 @@ package store.domain;
 
 import java.util.List;
 import java.util.Map;
+import store.exception.NonExistProductException;
 
 public class Store {
 
@@ -36,18 +37,18 @@ public class Store {
     private Product findProductOrElseThrow(String name) {
         Product product = products.get(name);
         if (product == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품입니다.");
+            throw new NonExistProductException();
         }
         return product;
     }
 
-    private void validatePurchaseQuantity(int count, ProductPromotion productPromotion, Product product) {
+    private void validatePurchaseQuantity(int purchaseQuantity, ProductPromotion productPromotion, Product product) {
         if (productPromotion != null) {
-            productPromotion.validatePurchaseQuantity(count);
+            productPromotion.validatePurchaseQuantity(purchaseQuantity);
             return;
         }
 
-        product.validatePurchaseQuantity(count);
+        product.validatePurchaseQuantity(purchaseQuantity);
     }
 
     public List<Product> getProducts() {

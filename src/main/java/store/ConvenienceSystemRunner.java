@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import store.converter.StringToPurchaseItemConverter;
 import store.domain.Promotion;
+import store.domain.PromotionNoticeResult;
 import store.domain.PurchaseItem;
 import store.domain.Store;
 import store.io.ProductsInitializer;
@@ -28,6 +29,14 @@ public class ConvenienceSystemRunner {
         outputView.printProducts(store);
 
         List<PurchaseItem> purchaseItems = inputPurchaseItems();
+        try {
+            for (PurchaseItem purchaseItem : purchaseItems) {
+                PromotionNoticeResult promotionNoticeResult = store.calculatePromotionNoticeResult(purchaseItem.name(),
+                        purchaseItem.purchaseQuantity());
+            }
+        } catch (IllegalArgumentException exception) {
+            outputView.printErrorMessage(exception);
+        }
     }
 
     private Store initStore() {

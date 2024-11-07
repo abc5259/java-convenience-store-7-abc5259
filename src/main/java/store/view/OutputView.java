@@ -12,11 +12,13 @@ public class OutputView {
 
     public void printStartMessage() {
         System.out.println("안녕하세요. W편의점입니다.\n현재 보유하고 있는 상품입니다.");
+        printEmptyLine();
     }
 
     public void printProducts(Store store) {
         List<Product> products = store.getProducts();
         products.forEach(product -> printProduct(product, store.getProductPromotion(product)));
+        printEmptyLine();
     }
 
     public void printErrorMessage(RuntimeException exception) {
@@ -25,6 +27,10 @@ public class OutputView {
 
     public void printErrorMessage(String message) {
         System.out.printf(ERROR_MESSAGE_FORMAT, message);
+    }
+
+    private void printEmptyLine() {
+        System.out.println();
     }
 
     private void printProduct(Product product, ProductPromotion productPromotion) {
