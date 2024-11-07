@@ -59,19 +59,32 @@ class StoreTest {
 
     @ParameterizedTest
     @CsvSource({
-            "10, 10, 1, NOT_APPLIED_QUANTITY, 1",
-            "10, 7, 10, NOT_APPLIED_QUANTITY, 4",
-            "10, 7, 7, NOT_APPLIED_QUANTITY, 1",
-            "10, 10, 4, NOT_APPLIED_QUANTITY, 1",
-            "10, 5, 6, NOT_APPLIED_QUANTITY, 3",
-            "10, 10, 3, EXACT_PROMOTION, 3",
-            "10, 10, 6, EXACT_PROMOTION, 6",
-            "10, 10, 9, EXACT_PROMOTION, 9",
-            "10, 10, 2, MORE_QUANTITY, 1",
-            "10, 10, 5, MORE_QUANTITY, 1",
-            "10, 10, 8, MORE_QUANTITY, 1",
+            "2, 1, 10, 0, 4, NOT_APPLIED_QUANTITY, 4",
+            "2, 1, 10, 10, 1, NOT_APPLIED_QUANTITY, 1",
+            "2, 1, 10, 7, 10, NOT_APPLIED_QUANTITY, 4",
+            "2, 1, 10, 7, 7, NOT_APPLIED_QUANTITY, 1",
+            "2, 1, 10, 10, 4, NOT_APPLIED_QUANTITY, 1",
+            "2, 1, 10, 5, 6, NOT_APPLIED_QUANTITY, 3",
+            "2, 1, 10, 10, 3, EXACT_PROMOTION, 3",
+            "2, 1, 10, 10, 6, EXACT_PROMOTION, 6",
+            "2, 1, 10, 10, 9, EXACT_PROMOTION, 9",
+            "2, 1, 10, 10, 2, MORE_QUANTITY, 1",
+            "2, 1, 10, 10, 5, MORE_QUANTITY, 1",
+            "2, 1, 10, 10, 8, MORE_QUANTITY, 1",
+            "1, 1, 3, 3, 4, NOT_APPLIED_QUANTITY, 2",
+            "1, 1, 10, 0, 3, NOT_APPLIED_QUANTITY, 3",
+            "1, 1, 10, 5, 5, NOT_APPLIED_QUANTITY, 1",
+            "1, 1, 10, 10, 20, NOT_APPLIED_QUANTITY, 10",
+            "1, 1, 10, 10, 2, EXACT_PROMOTION, 2",
+            "1, 1, 10, 10, 10, EXACT_PROMOTION, 10",
+            "1, 1, 4, 5, 4, EXACT_PROMOTION, 4",
+            "1, 1, 10, 10, 1, MORE_QUANTITY, 1",
+            "1, 1, 10, 10, 3, MORE_QUANTITY, 1",
+            "1, 1, 10, 10, 5, MORE_QUANTITY, 1",
     })
     void 특정_상품을_구매하기_원할때_해당_상품의_프로모션에_따라_프로모션_안내_결과를_계산한다(
+            int buyCount,
+            int getCount,
             int productQuantity,
             int promotionQuantity,
             int purchaseQuantity,
@@ -79,7 +92,7 @@ class StoreTest {
             int resultProductQuantity) {
         //given
         Product product = new Product("콜라", 1000, productQuantity);
-        Promotion promotion = create_Buy_N_Free_Count_Promotion(2, 1);
+        Promotion promotion = create_Buy_N_Free_Count_Promotion(buyCount, getCount);
         ProductPromotion productPromotion = new ProductPromotion(product, promotion, promotionQuantity);
         Store store = new Store(Map.of("콜라", product), Map.of(product, productPromotion));
 
