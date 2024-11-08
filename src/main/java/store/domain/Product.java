@@ -4,12 +4,14 @@ import store.exception.NotEnoughQuantityException;
 
 public class Product {
 
+    private static final int MINIMUM_QUANTITY = 0;
+
     private final String name;
     private final int price;
     private int quantity;
 
     public Product(String name, int price) {
-        this(name, price, 0);
+        this(name, price, MINIMUM_QUANTITY);
     }
 
     public Product(String name, int price, int quantity) {
@@ -19,19 +21,26 @@ public class Product {
         this.quantity = quantity;
     }
 
-    private void validateQuantityIsNegative(int quantity) {
-        if (quantity < 0) {
-            throw new IllegalArgumentException("수량은 음수가 될 수 없습니다.");
-        }
-    }
-
     public void increaseQuantity(int quantity) {
         this.quantity += quantity;
+    }
+
+    public void reduceQuantity(PurchaseItem purchaseItem) {
+        int currentQuantity = this.quantity;
+        this.quantity -= purchaseItem.getPurchaseQuantity();
+        this.quantity = Math.max(this.quantity, MINIMUM_QUANTITY);
+        purchaseItem.decreaseQuantity(currentQuantity);
     }
 
     public void validatePurchaseQuantity(int count) {
         if (this.quantity < count) {
             throw new NotEnoughQuantityException();
+        }
+    }
+
+    private void validateQuantityIsNegative(int quantity) {
+        if (quantity < MINIMUM_QUANTITY) {
+            throw new IllegalArgumentException("수량은 음수가 될 수 없습니다.");
         }
     }
 

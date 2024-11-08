@@ -28,7 +28,17 @@ public class Store {
         return PromotionNoticeResult.from(name, purchaseQuantity, applicablePromotionProductQuantity);
     }
 
-    public void validatePurchase(String name, int purchaseQuantity) {
+    public void purchaseProduct(PurchaseItem purchaseItem) {
+        validatePurchase(purchaseItem.getName(), purchaseItem.getPurchaseQuantity());
+        Product product = findProductOrElseThrow(purchaseItem.getName());
+        PromotionProduct productPromotion = productPromotions.get(product);
+
+        if (productPromotion != null) {
+            productPromotion.reduceQuantity(purchaseItem);
+        }
+    }
+
+    private void validatePurchase(String name, int purchaseQuantity) {
         Product product = findProductOrElseThrow(name);
         PromotionProduct productPromotion = productPromotions.get(product);
         validatePurchaseQuantity(purchaseQuantity, productPromotion, product);

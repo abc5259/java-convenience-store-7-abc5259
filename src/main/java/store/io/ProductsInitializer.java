@@ -42,9 +42,6 @@ public class ProductsInitializer {
                 products.put(productName, product);
             }
         }
-        System.out.println(products);
-        System.out.println();
-        System.out.println(PromotionProducts);
         return new Store(products, PromotionProducts);
     }
 

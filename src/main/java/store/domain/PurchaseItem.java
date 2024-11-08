@@ -26,6 +26,7 @@ public class PurchaseItem {
 
     public void decreaseQuantity(int quantity) {
         this.purchaseQuantity -= quantity;
+        this.purchaseQuantity = Math.max(0, this.purchaseQuantity);
     }
 
     public String getName() {

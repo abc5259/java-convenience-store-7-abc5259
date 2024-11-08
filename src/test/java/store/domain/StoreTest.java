@@ -24,7 +24,7 @@ class StoreTest {
         Store store = new Store(products, new HashMap<>());
 
         //when //then
-        assertThatThrownBy(() -> store.validatePurchase("사이다", 1))
+        assertThatThrownBy(() -> store.calculatePromotionNoticeResult("사이다", 1))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않는 상품입니다.");
     }
@@ -39,7 +39,7 @@ class StoreTest {
         Store store = new Store(Map.of("콜라", product), Map.of(product, productPromotion));
 
         //when //then
-        assertThatThrownBy(() -> store.validatePurchase("콜라", 14))
+        assertThatThrownBy(() -> store.calculatePromotionNoticeResult("콜라", 14))
                 .isInstanceOf(NotEnoughQuantityException.class);
     }
 
@@ -54,7 +54,7 @@ class StoreTest {
 
         //when //then
         assertThatNoException()
-                .isThrownBy(() -> store.validatePurchase("콜라", 13));
+                .isThrownBy(() -> store.calculatePromotionNoticeResult("콜라", 13));
     }
 
     @ParameterizedTest
@@ -100,7 +100,7 @@ class StoreTest {
         PromotionNoticeResult result = store.calculatePromotionNoticeResult("콜라", purchaseQuantity);
 
         //then
-        assertThat(result).extracting("type", "productName", "productQuantity")
+        assertThat(result).extracting("promotionNoticeType", "productName", "productQuantity")
                 .containsExactly(
                         promotionNoticeType,
                         "콜라",

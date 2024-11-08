@@ -3,9 +3,11 @@ package store.domain;
 import camp.nextstep.edu.missionutils.DateTimes;
 
 public class PromotionProduct {
+    private static final int MINIMUM_QUANTITY = 0;
+
     private final Product product;
     private final Promotion promotion;
-    private final int quantity;
+    private int quantity;
 
     public PromotionProduct(Product product, Promotion promotion, int quantity) {
         this.product = product;
@@ -31,6 +33,22 @@ public class PromotionProduct {
         return promotion.calculateApplicablePromotionProductQuantity(this.quantity, purchaseQuantity);
     }
 
+
+    public void reduceQuantity(PurchaseItem purchaseItem) {
+        if (isNotApplicablePromotion()) {
+            product.reduceQuantity(purchaseItem);
+            int currQuantity = this.quantity;
+            this.quantity -= purchaseItem.getPurchaseQuantity();
+            this.quantity = Math.max(MINIMUM_QUANTITY, this.quantity);
+            purchaseItem.decreaseQuantity(currQuantity);
+            return;
+        }
+        int currQuantity = this.quantity;
+        this.quantity -= purchaseItem.getPurchaseQuantity();
+        this.quantity = Math.max(MINIMUM_QUANTITY, this.quantity);
+        purchaseItem.decreaseQuantity(currQuantity);
+        product.reduceQuantity(purchaseItem);
+    }
 
     public String getPromotionName() {
         return promotion.getName();
