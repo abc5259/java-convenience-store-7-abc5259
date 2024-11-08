@@ -6,7 +6,7 @@ import static store.domain.PromotionNoticeType.NOT_APPLIED_PROMOTION;
 import static store.domain.PromotionNoticeType.NOT_APPLIED_QUANTITY;
 
 public record PromotionNoticeResult(
-        PromotionNoticeType type,
+        PromotionNoticeType promotionNoticeType,
         String productName,
         int productQuantity
 ) {
@@ -29,5 +29,9 @@ public record PromotionNoticeResult(
 
         return new PromotionNoticeResult(NOT_APPLIED_QUANTITY, name,
                 purchaseQuantity - applicablePromotionProductQuantity);
+    }
+
+    public boolean isNeedExtraRequest() {
+        return promotionNoticeType.isNeedExtraRequest();
     }
 }

@@ -1,9 +1,18 @@
 package store;
 
+import static store.domain.Answer.NO;
+import static store.domain.Answer.YES;
+import static store.domain.PromotionNoticeType.MORE_QUANTITY;
+import static store.domain.PromotionNoticeType.NOT_APPLIED_QUANTITY;
+
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import store.converter.StringToAnswerConverter;
 import store.converter.StringToPurchaseItemConverter;
+import store.domain.Answer;
 import store.domain.Promotion;
 import store.domain.PromotionNoticeResult;
 import store.domain.PurchaseItem;
@@ -28,14 +37,35 @@ public class ConvenienceSystemRunner {
         outputView.printStartMessage();
         outputView.printProducts(store);
 
-        List<PurchaseItem> purchaseItems = inputPurchaseItems();
-        try {
-            for (PurchaseItem purchaseItem : purchaseItems) {
-                PromotionNoticeResult promotionNoticeResult = store.calculatePromotionNoticeResult(purchaseItem.name(),
-                        purchaseItem.purchaseQuantity());
+        Map<PurchaseItem, PromotionNoticeResult> promotionNoticeResults = getPromotionNoticeResults(store);
+        for (Entry<PurchaseItem, PromotionNoticeResult> entry : promotionNoticeResults.entrySet()) {
+            PurchaseItem purchaseItem = entry.getKey();
+            PromotionNoticeResult promotionNoticeResult = entry.getValue();
+            if (promotionNoticeResult.promotionNoticeType() == MORE_QUANTITY) {
+                Answer answer = inputExtraPromotionNoticeResult(promotionNoticeResult);
+                if (answer == YES) {
+                    purchaseItem.increaseQuantity(promotionNoticeResult.productQuantity());
+                }
             }
-        } catch (IllegalArgumentException exception) {
-            outputView.printErrorMessage(exception);
+            if (promotionNoticeResult.promotionNoticeType() == NOT_APPLIED_QUANTITY) {
+                Answer answer = inputExtraPromotionNoticeResult(promotionNoticeResult);
+                if (answer == NO) {
+                    purchaseItem.decreaseQuantity(promotionNoticeResult.productQuantity());
+                }
+            }
+        }
+
+    }
+
+    private Answer inputExtraPromotionNoticeResult(PromotionNoticeResult promotionNoticeResult) {
+        while (true) {
+            try {
+                String result = inputView.inputExtraPromotionNoticeRequest(promotionNoticeResult);
+                StringToAnswerConverter stringToAnswerConverter = new StringToAnswerConverter();
+                return stringToAnswerConverter.convert(result);
+            } catch (IllegalArgumentException exception) {
+                outputView.printErrorMessage(exception.getMessage());
+            }
         }
     }
 
@@ -46,18 +76,26 @@ public class ConvenienceSystemRunner {
         return productsInitializer.initialize(promotions);
     }
 
-    public List<PurchaseItem> inputPurchaseItems() {
+    public Map<PurchaseItem, PromotionNoticeResult> getPromotionNoticeResults(Store store) {
         while (true) {
             try {
                 String[] items = inputView.inputPurchaseItems().split(",");
                 validateLength(items);
                 StringToPurchaseItemConverter converter = new StringToPurchaseItemConverter();
-                return Arrays.stream(items)
+                List<PurchaseItem> purchaseItems = Arrays.stream(items)
                         .map(String::trim)
                         .map(converter::convert)
                         .toList();
+                Map<PurchaseItem, PromotionNoticeResult> promotionNoticeResultMap = new HashMap<>();
+                for (PurchaseItem purchaseItem : purchaseItems) {
+                    PromotionNoticeResult promotionNoticeResult = store.calculatePromotionNoticeResult(
+                            purchaseItem.getName(),
+                            purchaseItem.getPurchaseQuantity());
+                    promotionNoticeResultMap.put(purchaseItem, promotionNoticeResult);
+                }
+                return promotionNoticeResultMap;
             } catch (IllegalArgumentException exception) {
-                outputView.printErrorMessage("올바르지 않은 형식으로 입력했습니다.");
+                outputView.printErrorMessage(exception.getMessage());
             }
         }
     }
