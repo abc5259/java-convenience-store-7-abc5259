@@ -2,12 +2,12 @@ package store.domain;
 
 import camp.nextstep.edu.missionutils.DateTimes;
 
-public class ProductPromotion {
+public class PromotionProduct {
     private final Product product;
     private final Promotion promotion;
     private final int quantity;
 
-    public ProductPromotion(Product product, Promotion promotion, int quantity) {
+    public PromotionProduct(Product product, Promotion promotion, int quantity) {
         this.product = product;
         this.promotion = promotion;
         this.quantity = quantity;

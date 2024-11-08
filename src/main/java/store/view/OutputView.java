@@ -2,7 +2,7 @@ package store.view;
 
 import java.util.List;
 import store.domain.Product;
-import store.domain.ProductPromotion;
+import store.domain.PromotionProduct;
 import store.domain.Store;
 
 public class OutputView {
@@ -17,7 +17,7 @@ public class OutputView {
 
     public void printProducts(Store store) {
         List<Product> products = store.getProducts();
-        products.forEach(product -> printProduct(product, store.getProductPromotion(product)));
+        products.forEach(product -> printProduct(product, store.getPromotionProduct(product)));
         printEmptyLine();
     }
 
@@ -33,7 +33,7 @@ public class OutputView {
         System.out.println();
     }
 
-    private void printProduct(Product product, ProductPromotion productPromotion) {
+    private void printProduct(Product product, PromotionProduct productPromotion) {
         if (productPromotion != null) {
             System.out.printf(PROMOTION_PRODUCT_INFO_FORMAT,
                     product.getName(),

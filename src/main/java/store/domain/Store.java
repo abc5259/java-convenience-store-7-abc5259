@@ -7,9 +7,9 @@ import store.exception.NonExistProductException;
 public class Store {
 
     private final Map<String, Product> products;
-    private final Map<Product, ProductPromotion> productPromotions;
+    private final Map<Product, PromotionProduct> productPromotions;
 
-    public Store(Map<String, Product> products, Map<Product, ProductPromotion> productPromotions) {
+    public Store(Map<String, Product> products, Map<Product, PromotionProduct> productPromotions) {
         this.products = products;
         this.productPromotions = productPromotions;
     }
@@ -17,20 +17,20 @@ public class Store {
     public PromotionNoticeResult calculatePromotionNoticeResult(String name, int purchaseQuantity) {
         validatePurchase(name, purchaseQuantity);
         Product product = findProductOrElseThrow(name);
-        ProductPromotion productPromotion = productPromotions.get(product);
+        PromotionProduct productPromotion = productPromotions.get(product);
 
         if (productPromotion == null || productPromotion.isNotApplicablePromotion()) {
             return PromotionNoticeResult.notApplyPromotion(name);
         }
 
-        int applicablePromotionProductQuantity = productPromotion.calculateApplicablePromotionProductQuantity(
-                purchaseQuantity);
+        int applicablePromotionProductQuantity =
+                productPromotion.calculateApplicablePromotionProductQuantity(purchaseQuantity);
         return PromotionNoticeResult.from(name, purchaseQuantity, applicablePromotionProductQuantity);
     }
 
     public void validatePurchase(String name, int purchaseQuantity) {
         Product product = findProductOrElseThrow(name);
-        ProductPromotion productPromotion = productPromotions.get(product);
+        PromotionProduct productPromotion = productPromotions.get(product);
         validatePurchaseQuantity(purchaseQuantity, productPromotion, product);
     }
 
@@ -42,7 +42,7 @@ public class Store {
         return product;
     }
 
-    private void validatePurchaseQuantity(int purchaseQuantity, ProductPromotion productPromotion, Product product) {
+    private void validatePurchaseQuantity(int purchaseQuantity, PromotionProduct productPromotion, Product product) {
         if (productPromotion != null) {
             productPromotion.validatePurchaseQuantity(purchaseQuantity);
             return;
@@ -55,7 +55,7 @@ public class Store {
         return List.copyOf(products.values());
     }
 
-    public ProductPromotion getProductPromotion(Product product) {
+    public PromotionProduct getPromotionProduct(Product product) {
         return productPromotions.get(product);
     }
 }

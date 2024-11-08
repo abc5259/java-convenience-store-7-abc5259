@@ -34,7 +34,7 @@ class StoreTest {
         //given
         Product product = new Product("콜라", 1000, 10);
         Promotion promotion = new Promotion("2+1", 2, 1, LocalDate.now().minusDays(1), LocalDate.now().plusDays(1));
-        ProductPromotion productPromotion = new ProductPromotion(product, promotion, 3);
+        PromotionProduct productPromotion = new PromotionProduct(product, promotion, 3);
 
         Store store = new Store(Map.of("콜라", product), Map.of(product, productPromotion));
 
@@ -48,7 +48,7 @@ class StoreTest {
         //given
         Product product = new Product("콜라", 1000, 10);
         Promotion promotion = new Promotion("2+1", 2, 1, LocalDate.now(), LocalDate.now());
-        ProductPromotion productPromotion = new ProductPromotion(product, promotion, 3);
+        PromotionProduct productPromotion = new PromotionProduct(product, promotion, 3);
 
         Store store = new Store(Map.of("콜라", product), Map.of(product, productPromotion));
 
@@ -93,7 +93,7 @@ class StoreTest {
         //given
         Product product = new Product("콜라", 1000, productQuantity);
         Promotion promotion = create_Buy_N_Free_Count_Promotion(buyCount, getCount);
-        ProductPromotion productPromotion = new ProductPromotion(product, promotion, promotionQuantity);
+        PromotionProduct productPromotion = new PromotionProduct(product, promotion, promotionQuantity);
         Store store = new Store(Map.of("콜라", product), Map.of(product, productPromotion));
 
         //when

@@ -8,8 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import store.domain.Product;
-import store.domain.ProductPromotion;
 import store.domain.Promotion;
+import store.domain.PromotionProduct;
 import store.domain.Store;
 
 public class ProductsInitializer {
@@ -21,7 +21,7 @@ public class ProductsInitializer {
         List<String> productInfoLines = readAllProductInfoLines();
 
         Map<String, Product> products = new LinkedHashMap<>();
-        Map<Product, ProductPromotion> productPromotions = new LinkedHashMap<>();
+        Map<Product, PromotionProduct> PromotionProducts = new LinkedHashMap<>();
         for (String productInfoLine : productInfoLines) {
             String[] productInfoParts = productInfoLine.split(",");
             String productName = productInfoParts[0];
@@ -37,23 +37,22 @@ public class ProductsInitializer {
             }
             if (!promotionName.equals("null")) {
                 Promotion promotion = promotions.get(promotionName);
-                ProductPromotion productPromotion = new ProductPromotion(product, promotion, quantity);
-                productPromotions.put(product, productPromotion);
+                PromotionProduct PromotionProduct = new PromotionProduct(product, promotion, quantity);
+                PromotionProducts.put(product, PromotionProduct);
                 products.put(productName, product);
             }
         }
 
-        return new Store(products, productPromotions);
+        return new Store(products, PromotionProducts);
     }
 
     private List<String> readAllProductInfoLines() {
-        List<String> lines = null;
         try {
-            lines = Files.readAllLines(PRODUCT_PATH, StandardCharsets.UTF_8);
+            List<String> lines = Files.readAllLines(PRODUCT_PATH, StandardCharsets.UTF_8);
+            lines.removeFirst(); // 첫 컬럼명 제거
+            return lines;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        lines.removeFirst(); // 첫 컬럼명 제거
-        return lines;
     }
 }
