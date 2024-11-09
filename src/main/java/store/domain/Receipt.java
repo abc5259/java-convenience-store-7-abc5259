@@ -9,6 +9,12 @@ public class Receipt {
         this.productPurchaseLogs = productPurchaseLogs;
     }
 
+    public int getTotalQuantity() {
+        return productPurchaseLogs.stream()
+                .mapToInt(ProductPurchaseLog::purchaseQuantity)
+                .sum();
+    }
+
     public int getTotalPrice() {
         return productPurchaseLogs.stream()
                 .mapToInt(ProductPurchaseLog::calculateTotalPrice)
@@ -24,5 +30,9 @@ public class Receipt {
     public int getLastPrice() {
         //TODO: 멤버십 할일해야함
         return getTotalPrice() - getTotalGiveawayProductPrice();
+    }
+
+    public List<ProductPurchaseLog> getProductPurchaseLogs() {
+        return List.copyOf(productPurchaseLogs);
     }
 }

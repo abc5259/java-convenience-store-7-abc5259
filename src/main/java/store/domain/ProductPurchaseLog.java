@@ -18,4 +18,8 @@ public record ProductPurchaseLog(
     public int calculateNotApplicablePromotionProductPrice() {
         return productInfo.price() * (purchaseQuantity - applicablePromotionProductQuantity);
     }
+
+    public String getProductName() {
+        return productInfo.name();
+    }
 }

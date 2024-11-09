@@ -59,6 +59,7 @@ public class ConvenienceSystemRunner {
 
         List<PurchaseItem> purchaseItems = promotionNoticeResults.keySet().stream().toList();
         Receipt receipt = store.purchaseProducts(purchaseItems, DateTimes.now().toLocalDate());
+        outputView.printReceipt(receipt);
     }
 
     private Answer inputExtraPromotionNoticeResult(PromotionNoticeResult promotionNoticeResult) {
