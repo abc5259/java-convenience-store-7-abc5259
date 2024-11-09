@@ -29,7 +29,14 @@ public class Product {
         int currentQuantity = this.quantity;
         this.quantity -= purchaseItem.getPurchaseQuantity();
         this.quantity = Math.max(this.quantity, MINIMUM_QUANTITY);
-        purchaseItem.decreaseQuantity(currentQuantity);
+        purchaseItem.reduceQuantity(currentQuantity);
+    }
+
+    public ProductPurchaseLog purchase(PurchaseItem purchaseItem) {
+        validatePurchaseQuantity(purchaseItem.getPurchaseQuantity());
+        ProductPurchaseLog productPurchaseLog = new ProductPurchaseLog(0, 0, purchaseItem.getPurchaseQuantity());
+        reduceQuantity(purchaseItem);
+        return productPurchaseLog;
     }
 
     public void validatePurchaseQuantity(int count) {

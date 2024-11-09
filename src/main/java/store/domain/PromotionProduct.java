@@ -34,20 +34,38 @@ public class PromotionProduct {
     }
 
 
-    public void reduceQuantity(PurchaseItem purchaseItem) {
+    public ProductPurchaseLog purchase(PurchaseItem purchaseItem) {
+        validatePurchaseQuantity(purchaseItem.getPurchaseQuantity());
         if (isNotApplicablePromotion()) {
+            int purchaseQuantity = purchaseItem.getPurchaseQuantity();
             product.reduceQuantity(purchaseItem);
-            int currQuantity = this.quantity;
-            this.quantity -= purchaseItem.getPurchaseQuantity();
-            this.quantity = Math.max(MINIMUM_QUANTITY, this.quantity);
-            purchaseItem.decreaseQuantity(currQuantity);
-            return;
+            reduceQuantity(purchaseItem);
+            return new ProductPurchaseLog(0, 0, purchaseQuantity);
         }
+        ProductPurchaseLog productPurchaseLog = createProductPurchaseLog(purchaseItem);
+        reduceQuantity(purchaseItem);
+        product.reduceQuantity(purchaseItem);
+        return productPurchaseLog;
+    }
+
+    private ProductPurchaseLog createProductPurchaseLog(PurchaseItem purchaseItem) {
+        int applicablePromotionProductQuantity = promotion.calculateApplicablePromotionProductQuantity(
+                this.quantity,
+                purchaseItem.getPurchaseQuantity());
+        int giveawayProductQuantity = promotion.calculateGiveawayProductQuantity(
+                this.quantity,
+                purchaseItem.getPurchaseQuantity());
+        return new ProductPurchaseLog(
+                applicablePromotionProductQuantity,
+                giveawayProductQuantity,
+                purchaseItem.getPurchaseQuantity());
+    }
+
+    private void reduceQuantity(PurchaseItem purchaseItem) {
         int currQuantity = this.quantity;
         this.quantity -= purchaseItem.getPurchaseQuantity();
         this.quantity = Math.max(MINIMUM_QUANTITY, this.quantity);
-        purchaseItem.decreaseQuantity(currQuantity);
-        product.reduceQuantity(purchaseItem);
+        purchaseItem.reduceQuantity(currQuantity);
     }
 
     public String getPromotionName() {

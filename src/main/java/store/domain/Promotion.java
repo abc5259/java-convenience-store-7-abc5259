@@ -41,6 +41,13 @@ public class Promotion {
         return purchaseQuantity - remainder;
     }
 
+    public int calculateGiveawayProductQuantity(int promotionProductQuantity, int purchaseQuantity) {
+        int applicablePromotionProductQuantity = calculateApplicablePromotionProductQuantity(
+                promotionProductQuantity,
+                purchaseQuantity);
+        return (applicablePromotionProductQuantity / buyCount) * getCount;
+    }
+
     private boolean canMorePurchaseQuantity(int promotionProductQuantity, int purchaseQuantity, int remainder) {
         return remainder == buyCount && purchaseQuantity + getCount <= promotionProductQuantity;
     }

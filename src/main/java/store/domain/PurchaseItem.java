@@ -24,7 +24,7 @@ public class PurchaseItem {
         this.purchaseQuantity += quantity;
     }
 
-    public void decreaseQuantity(int quantity) {
+    public void reduceQuantity(int quantity) {
         this.purchaseQuantity -= quantity;
         this.purchaseQuantity = Math.max(0, this.purchaseQuantity);
     }
