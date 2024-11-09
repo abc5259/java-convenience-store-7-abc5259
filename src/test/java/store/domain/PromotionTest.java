@@ -34,7 +34,7 @@ class PromotionTest {
         Promotion promotion = create_Buy_N_Free_Count_Promotion(buyCount, getCount);
 
         //when
-        int result = promotion.calculateApplicablePromotionProductQuantity(
+        int result = promotion.calculateAdjustedPromotionQuantity(
                 promotionProductQuantity,
                 purchaseQuantity,
                 LocalDate.now());

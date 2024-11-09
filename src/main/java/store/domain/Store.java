@@ -24,9 +24,9 @@ public class Store {
             return PromotionNoticeResult.notApplyPromotion(name);
         }
 
-        int applicablePromotionProductQuantity =
-                productPromotion.calculateApplicablePromotionProductQuantity(purchaseQuantity, now);
-        return PromotionNoticeResult.from(name, purchaseQuantity, applicablePromotionProductQuantity);
+        int adjustedPromotionProductQuantity =
+                productPromotion.calculateAdjustedPromotionQuantity(purchaseQuantity, now);
+        return PromotionNoticeResult.from(name, purchaseQuantity, adjustedPromotionProductQuantity);
     }
 
     public ProductPurchaseLog purchaseProduct(PurchaseItem purchaseItem, LocalDate now) {

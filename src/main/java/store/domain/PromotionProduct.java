@@ -23,9 +23,9 @@ public class PromotionProduct {
         return !promotion.isApplicable(now);
     }
 
-    public int calculateApplicablePromotionProductQuantity(int purchaseQuantity, LocalDate now) {
+    public int calculateAdjustedPromotionQuantity(int purchaseQuantity, LocalDate now) {
         validatePurchaseQuantity(purchaseQuantity);
-        return promotion.calculateApplicablePromotionProductQuantity(this.quantity, purchaseQuantity, now);
+        return promotion.calculateAdjustedPromotionQuantity(this.quantity, purchaseQuantity, now);
     }
 
 

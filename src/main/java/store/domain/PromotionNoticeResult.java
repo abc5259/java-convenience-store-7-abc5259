@@ -17,21 +17,17 @@ public record PromotionNoticeResult(
 
     public static PromotionNoticeResult from(String name,
                                              int purchaseQuantity,
-                                             int applicablePromotionProductQuantity) {
-        if (purchaseQuantity == applicablePromotionProductQuantity) {
+                                             int adjustedPromotionProductQuantity) {
+        if (purchaseQuantity == adjustedPromotionProductQuantity) {
             return new PromotionNoticeResult(EXACT_PROMOTION, name, purchaseQuantity);
         }
 
-        if (purchaseQuantity < applicablePromotionProductQuantity) {
+        if (purchaseQuantity < adjustedPromotionProductQuantity) {
             return new PromotionNoticeResult(MORE_QUANTITY, name,
-                    applicablePromotionProductQuantity - purchaseQuantity);
+                    adjustedPromotionProductQuantity - purchaseQuantity);
         }
 
         return new PromotionNoticeResult(NOT_APPLIED_QUANTITY, name,
-                purchaseQuantity - applicablePromotionProductQuantity);
-    }
-
-    public boolean isNeedExtraRequest() {
-        return promotionNoticeType.isNeedExtraRequest();
+                purchaseQuantity - adjustedPromotionProductQuantity);
     }
 }

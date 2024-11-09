@@ -25,11 +25,12 @@ public class Promotion {
     /**
      * @param promotionProductQuantity 현재 프로모션 상품 수량
      * @param purchaseQuantity         구매하기 원하는 상품 수량
-     * @return 얼만만큼의 수량이 혜택을 받는지 리턴
+     * @param now                      현재 날짜
+     * @return 혜택을 받을 수 있는 최종 상품 수량.
      */
-    public int calculateApplicablePromotionProductQuantity(int promotionProductQuantity,
-                                                           int purchaseQuantity,
-                                                           LocalDate now) {
+    public int calculateAdjustedPromotionQuantity(int promotionProductQuantity,
+                                                  int purchaseQuantity,
+                                                  LocalDate now) {
         if (!isApplicable(now)) {
             return 0;
         }
@@ -46,12 +47,32 @@ public class Promotion {
         return purchaseQuantity - remainder;
     }
 
+    /**
+     * @param promotionProductQuantity 현재 프로모션 상품 수량
+     * @param purchaseQuantity         구매하기 원하는 상품 수량
+     * @return 얼만만큼의 수량이 혜택을 받는지 리턴
+     */
+    public int calculateApplicablePromotionProductQuantity(int promotionProductQuantity,
+                                                           int purchaseQuantity,
+                                                           LocalDate now) {
+        if (!isApplicable(now)) {
+            return 0;
+        }
+        purchaseQuantity = Math.min(purchaseQuantity, promotionProductQuantity);
+        int remainder = purchaseQuantity % (buyCount + getCount);
+        if (remainder == 0) {
+            return purchaseQuantity;
+        }
+
+        return purchaseQuantity - remainder;
+    }
+
     public int calculateGiveawayProductQuantity(int promotionProductQuantity, int purchaseQuantity, LocalDate now) {
         int applicablePromotionProductQuantity = calculateApplicablePromotionProductQuantity(
                 promotionProductQuantity,
                 purchaseQuantity,
                 now);
-        return (applicablePromotionProductQuantity / buyCount) * getCount;
+        return (applicablePromotionProductQuantity / (buyCount + getCount)) * getCount;
     }
 
     private boolean canMorePurchaseQuantity(int promotionProductQuantity, int purchaseQuantity, int remainder) {
