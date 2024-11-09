@@ -1,5 +1,6 @@
 package store.domain;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import store.exception.NonExistProductException;
@@ -14,27 +15,27 @@ public class Store {
         this.productPromotions = productPromotions;
     }
 
-    public PromotionNoticeResult calculatePromotionNoticeResult(String name, int purchaseQuantity) {
+    public PromotionNoticeResult calculatePromotionNoticeResult(String name, int purchaseQuantity, LocalDate now) {
         validatePurchase(name, purchaseQuantity);
         Product product = findProductOrElseThrow(name);
         PromotionProduct productPromotion = productPromotions.get(product);
 
-        if (productPromotion == null || productPromotion.isNotApplicablePromotion()) {
+        if (productPromotion == null || productPromotion.isNotApplicablePromotion(now)) {
             return PromotionNoticeResult.notApplyPromotion(name);
         }
 
         int applicablePromotionProductQuantity =
-                productPromotion.calculateApplicablePromotionProductQuantity(purchaseQuantity);
+                productPromotion.calculateApplicablePromotionProductQuantity(purchaseQuantity, now);
         return PromotionNoticeResult.from(name, purchaseQuantity, applicablePromotionProductQuantity);
     }
 
-    public ProductPurchaseLog purchaseProduct(PurchaseItem purchaseItem) {
+    public ProductPurchaseLog purchaseProduct(PurchaseItem purchaseItem, LocalDate now) {
         validatePurchase(purchaseItem.getName(), purchaseItem.getPurchaseQuantity());
         Product product = findProductOrElseThrow(purchaseItem.getName());
         PromotionProduct productPromotion = productPromotions.get(product);
 
         if (productPromotion != null) {
-            return productPromotion.purchase(purchaseItem);
+            return productPromotion.purchase(purchaseItem, now);
         }
 
         return product.purchase(purchaseItem);

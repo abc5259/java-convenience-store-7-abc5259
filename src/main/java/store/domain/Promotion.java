@@ -27,7 +27,12 @@ public class Promotion {
      * @param purchaseQuantity         구매하기 원하는 상품 수량
      * @return 얼만만큼의 수량이 혜택을 받는지 리턴
      */
-    public int calculateApplicablePromotionProductQuantity(int promotionProductQuantity, int purchaseQuantity) {
+    public int calculateApplicablePromotionProductQuantity(int promotionProductQuantity,
+                                                           int purchaseQuantity,
+                                                           LocalDate now) {
+        if (!isApplicable(now)) {
+            return 0;
+        }
         purchaseQuantity = Math.min(purchaseQuantity, promotionProductQuantity);
         int remainder = purchaseQuantity % (buyCount + getCount);
         if (remainder == 0) {
@@ -41,10 +46,11 @@ public class Promotion {
         return purchaseQuantity - remainder;
     }
 
-    public int calculateGiveawayProductQuantity(int promotionProductQuantity, int purchaseQuantity) {
+    public int calculateGiveawayProductQuantity(int promotionProductQuantity, int purchaseQuantity, LocalDate now) {
         int applicablePromotionProductQuantity = calculateApplicablePromotionProductQuantity(
                 promotionProductQuantity,
-                purchaseQuantity);
+                purchaseQuantity,
+                now);
         return (applicablePromotionProductQuantity / buyCount) * getCount;
     }
 

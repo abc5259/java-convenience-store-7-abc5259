@@ -36,7 +36,8 @@ class PromotionTest {
         //when
         int result = promotion.calculateApplicablePromotionProductQuantity(
                 promotionProductQuantity,
-                purchaseQuantity);
+                purchaseQuantity,
+                LocalDate.now());
 
         //then
         Assertions.assertThat(result).isEqualTo(applicablePromotionProductQuantity);

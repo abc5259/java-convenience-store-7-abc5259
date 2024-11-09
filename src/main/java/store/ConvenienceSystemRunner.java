@@ -5,6 +5,7 @@ import static store.domain.Answer.YES;
 import static store.domain.PromotionNoticeType.MORE_QUANTITY;
 import static store.domain.PromotionNoticeType.NOT_APPLIED_QUANTITY;
 
+import camp.nextstep.edu.missionutils.DateTimes;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +51,7 @@ public class ConvenienceSystemRunner {
             if (promotionNoticeResult.promotionNoticeType() == NOT_APPLIED_QUANTITY) {
                 Answer answer = inputExtraPromotionNoticeResult(promotionNoticeResult);
                 if (answer == NO) {
-                    purchaseItem.decreaseQuantity(promotionNoticeResult.productQuantity());
+                    purchaseItem.reduceQuantity(promotionNoticeResult.productQuantity());
                 }
             }
         }
@@ -90,7 +91,8 @@ public class ConvenienceSystemRunner {
                 for (PurchaseItem purchaseItem : purchaseItems) {
                     PromotionNoticeResult promotionNoticeResult = store.calculatePromotionNoticeResult(
                             purchaseItem.getName(),
-                            purchaseItem.getPurchaseQuantity());
+                            purchaseItem.getPurchaseQuantity(),
+                            DateTimes.now().toLocalDate());
                     promotionNoticeResultMap.put(purchaseItem, promotionNoticeResult);
                 }
                 return promotionNoticeResultMap;

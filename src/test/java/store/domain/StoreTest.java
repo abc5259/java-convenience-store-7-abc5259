@@ -24,7 +24,7 @@ class StoreTest {
         Store store = new Store(products, new HashMap<>());
 
         //when //then
-        assertThatThrownBy(() -> store.calculatePromotionNoticeResult("사이다", 1))
+        assertThatThrownBy(() -> store.calculatePromotionNoticeResult("사이다", 1, LocalDate.now()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않는 상품입니다.");
     }
@@ -39,7 +39,7 @@ class StoreTest {
         Store store = new Store(Map.of("콜라", product), Map.of(product, productPromotion));
 
         //when //then
-        assertThatThrownBy(() -> store.calculatePromotionNoticeResult("콜라", 14))
+        assertThatThrownBy(() -> store.calculatePromotionNoticeResult("콜라", 14, LocalDate.now()))
                 .isInstanceOf(NotEnoughQuantityException.class);
     }
 
@@ -47,14 +47,14 @@ class StoreTest {
     void 구매_수량이_재고_수량을_초과하지_않은_경우_예외가_발생하지_않는다() {
         //given
         Product product = new Product("콜라", 1000, 10);
-        Promotion promotion = new Promotion("2+1", 2, 1, LocalDate.now(), LocalDate.now());
+        Promotion promotion = new Promotion("2+1", 2, 1, LocalDate.now().minusDays(1), LocalDate.now().plusDays(1));
         PromotionProduct productPromotion = new PromotionProduct(product, promotion, 3);
 
         Store store = new Store(Map.of("콜라", product), Map.of(product, productPromotion));
 
         //when //then
         assertThatNoException()
-                .isThrownBy(() -> store.calculatePromotionNoticeResult("콜라", 13));
+                .isThrownBy(() -> store.calculatePromotionNoticeResult("콜라", 13, LocalDate.now()));
     }
 
     @ParameterizedTest
@@ -97,7 +97,7 @@ class StoreTest {
         Store store = new Store(Map.of("콜라", product), Map.of(product, productPromotion));
 
         //when
-        PromotionNoticeResult result = store.calculatePromotionNoticeResult("콜라", purchaseQuantity);
+        PromotionNoticeResult result = store.calculatePromotionNoticeResult("콜라", purchaseQuantity, LocalDate.now());
 
         //then
         assertThat(result).extracting("promotionNoticeType", "productName", "productQuantity")

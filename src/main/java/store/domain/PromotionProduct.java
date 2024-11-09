@@ -1,6 +1,6 @@
 package store.domain;
 
-import camp.nextstep.edu.missionutils.DateTimes;
+import java.time.LocalDate;
 
 public class PromotionProduct {
     private static final int MINIMUM_QUANTITY = 0;
@@ -19,45 +19,40 @@ public class PromotionProduct {
         product.validatePurchaseQuantity(purchaseQuantity - this.quantity);
     }
 
-    public boolean isNotApplicablePromotion() {
-        return !promotion.isApplicable(DateTimes.now().toLocalDate());
+    public boolean isNotApplicablePromotion(LocalDate now) {
+        return !promotion.isApplicable(now);
     }
 
-    public int calculateApplicablePromotionProductQuantity(int purchaseQuantity) {
+    public int calculateApplicablePromotionProductQuantity(int purchaseQuantity, LocalDate now) {
         validatePurchaseQuantity(purchaseQuantity);
-
-        if (isNotApplicablePromotion()) {
-            return 0;
-        }
-
-        return promotion.calculateApplicablePromotionProductQuantity(this.quantity, purchaseQuantity);
+        return promotion.calculateApplicablePromotionProductQuantity(this.quantity, purchaseQuantity, now);
     }
 
 
-    public ProductPurchaseLog purchase(PurchaseItem purchaseItem) {
+    public ProductPurchaseLog purchase(PurchaseItem purchaseItem, LocalDate now) {
         validatePurchaseQuantity(purchaseItem.getPurchaseQuantity());
-        if (isNotApplicablePromotion()) {
+        if (isNotApplicablePromotion(now)) {
             int purchaseQuantity = purchaseItem.getPurchaseQuantity();
             product.reduceQuantity(purchaseItem);
             reduceQuantity(purchaseItem);
             return new ProductPurchaseLog(0, 0, purchaseQuantity);
         }
-        ProductPurchaseLog productPurchaseLog = createProductPurchaseLog(purchaseItem);
+        ProductPurchaseLog productPurchaseLog = createProductPurchaseLog(purchaseItem, now);
         reduceQuantity(purchaseItem);
         product.reduceQuantity(purchaseItem);
         return productPurchaseLog;
     }
 
-    private ProductPurchaseLog createProductPurchaseLog(PurchaseItem purchaseItem) {
-        int applicablePromotionProductQuantity = promotion.calculateApplicablePromotionProductQuantity(
-                this.quantity,
-                purchaseItem.getPurchaseQuantity());
-        int giveawayProductQuantity = promotion.calculateGiveawayProductQuantity(
-                this.quantity,
-                purchaseItem.getPurchaseQuantity());
+    private ProductPurchaseLog createProductPurchaseLog(PurchaseItem purchaseItem, LocalDate now) {
         return new ProductPurchaseLog(
-                applicablePromotionProductQuantity,
-                giveawayProductQuantity,
+                promotion.calculateApplicablePromotionProductQuantity(
+                        this.quantity,
+                        purchaseItem.getPurchaseQuantity(),
+                        now),
+                promotion.calculateGiveawayProductQuantity(
+                        this.quantity,
+                        purchaseItem.getPurchaseQuantity(),
+                        now),
                 purchaseItem.getPurchaseQuantity());
     }
 
