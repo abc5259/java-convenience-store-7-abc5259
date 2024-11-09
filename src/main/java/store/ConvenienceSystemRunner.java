@@ -17,6 +17,7 @@ import store.domain.Answer;
 import store.domain.Promotion;
 import store.domain.PromotionNoticeResult;
 import store.domain.PurchaseItem;
+import store.domain.Receipt;
 import store.domain.Store;
 import store.io.ProductsInitializer;
 import store.io.PromotionsInitializer;
@@ -56,6 +57,8 @@ public class ConvenienceSystemRunner {
             }
         }
 
+        List<PurchaseItem> purchaseItems = promotionNoticeResults.keySet().stream().toList();
+        Receipt receipt = store.purchaseProducts(purchaseItems, DateTimes.now().toLocalDate());
     }
 
     private Answer inputExtraPromotionNoticeResult(PromotionNoticeResult promotionNoticeResult) {

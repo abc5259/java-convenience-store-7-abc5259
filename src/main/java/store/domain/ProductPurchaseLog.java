@@ -6,4 +6,16 @@ public record ProductPurchaseLog(
         int giveawayProductQuantity,
         int purchaseQuantity
 ) {
+
+    public int calculateTotalPrice() {
+        return productInfo.price() * purchaseQuantity;
+    }
+
+    public int calculateGiveawayProductPrice() {
+        return productInfo.price() * giveawayProductQuantity;
+    }
+
+    public int calculateNotApplicablePromotionProductPrice() {
+        return productInfo.price() * (purchaseQuantity - applicablePromotionProductQuantity);
+    }
 }
