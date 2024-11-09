@@ -1,12 +1,15 @@
 package store.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import store.exception.NotEnoughQuantityException;
 
 class PromotionProductTest {
 
@@ -35,6 +38,19 @@ class PromotionProductTest {
         assertThat(promotionProduct.getQuantity()).isEqualTo(remainderPromotionProductQuantity);
         assertThat(product.getQuantity()).isEqualTo(remainderProductQuantity);
         assertThat(purchaseItem.getPurchaseQuantity()).isEqualTo(0);
+    }
+
+    @Test
+    void 구매_수량이_재고_수량을_초과한_경우_예외가_발생한다() {
+        //given
+        Promotion promotion = create_Buy_N_Free_Count_Promotion(2, 1);
+        Product product = new Product("콜라", 1000, 2);
+        PromotionProduct promotionProduct = new PromotionProduct(product, promotion, 3);
+        PurchaseItem purchaseItem = new PurchaseItem("콜라", 6);
+
+        //when //then
+        assertThatThrownBy(() -> promotionProduct.purchase(purchaseItem, APPLICABLE_PROMOTION_DATE))
+                .isInstanceOf(NotEnoughQuantityException.class);
     }
 
     private static Stream<Arguments> createPurchaseProductArguments() {
