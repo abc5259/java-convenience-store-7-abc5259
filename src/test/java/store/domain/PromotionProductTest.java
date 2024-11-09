@@ -61,7 +61,7 @@ class PromotionProductTest {
                         7, // 프로모션 상품 재고
                         new PurchaseItem("콜라", 10),
                         APPLICABLE_PROMOTION_DATE,
-                        new ProductPurchaseLog(6, 2, 10),
+                        new ProductPurchaseLog(new ProductInfo("콜라", 1000), 6, 2, 10),
                         0, // 사고 남은 프로모션 상품 재고
                         7 // 사고 남은 일반 상품 재고
                 ),
@@ -71,7 +71,7 @@ class PromotionProductTest {
                         7, // 프로모션 상품 재고
                         new PurchaseItem("콜라", 10),
                         NOT_APPLICABLE_PROMOTION_DATE,
-                        new ProductPurchaseLog(0, 0, 10),
+                        new ProductPurchaseLog(new ProductInfo("콜라", 1000), 0, 0, 10),
                         5, // 사고 남은 프로모션 상품 재고
                         0 // 사고 남은 일반 상품 재고
                 ),
@@ -81,7 +81,7 @@ class PromotionProductTest {
                         10, // 프로모션 상품 재고
                         new PurchaseItem("콜라", 3),
                         APPLICABLE_PROMOTION_DATE,
-                        new ProductPurchaseLog(3, 1, 3),
+                        new ProductPurchaseLog(new ProductInfo("콜라", 1000), 3, 1, 3),
                         7, // 사고 남은 프로모션 상품 재고
                         10 // 사고 남은 일반 상품 재고
                 ),
@@ -91,7 +91,7 @@ class PromotionProductTest {
                         9, // 프로모션 상품 재고
                         new PurchaseItem("오렌지주스", 2),
                         APPLICABLE_PROMOTION_DATE,
-                        new ProductPurchaseLog(2, 1, 2),
+                        new ProductPurchaseLog(new ProductInfo("오렌지주스", 1000), 2, 1, 2),
                         7, // 사고 남은 프로모션 상품 재고
                         0 // 사고 남은 일반 상품 재고
                 ),
@@ -101,7 +101,7 @@ class PromotionProductTest {
                         9, // 프로모션 상품 재고
                         new PurchaseItem("오렌지주스", 2),
                         NOT_APPLICABLE_PROMOTION_DATE,
-                        new ProductPurchaseLog(0, 0, 2),
+                        new ProductPurchaseLog(new ProductInfo("오렌지주스", 1000), 0, 0, 2),
                         7, // 사고 남은 프로모션 상품 재고
                         0 // 사고 남은 일반 상품 재고
                 ),
@@ -111,7 +111,7 @@ class PromotionProductTest {
                         9, // 프로모션 상품 재고
                         new PurchaseItem("오렌지주스", 1),
                         APPLICABLE_PROMOTION_DATE,
-                        new ProductPurchaseLog(0, 0, 1),
+                        new ProductPurchaseLog(new ProductInfo("오렌지주스", 1000), 0, 0, 1),
                         8, // 사고 남은 프로모션 상품 재고
                         0 // 사고 남은 일반 상품 재고
                 )

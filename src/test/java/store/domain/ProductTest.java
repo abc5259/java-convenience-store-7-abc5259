@@ -21,7 +21,8 @@ class ProductTest {
         ProductPurchaseLog productPurchaseLog = product.purchase(new PurchaseItem("콜라", purchaseQuantity));
 
         //then
-        assertThat(productPurchaseLog).isEqualTo(new ProductPurchaseLog(0, 0, purchaseQuantity));
+        assertThat(productPurchaseLog).isEqualTo(
+                new ProductPurchaseLog(new ProductInfo("콜라", 1000), 0, 0, purchaseQuantity));
         assertThat(product.getQuantity()).isEqualTo(remainderProductQuantity);
     }
 }

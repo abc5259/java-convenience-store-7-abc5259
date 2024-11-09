@@ -35,7 +35,7 @@ public class PromotionProduct {
             int purchaseQuantity = purchaseItem.getPurchaseQuantity();
             product.reduceQuantity(purchaseItem);
             reduceQuantity(purchaseItem);
-            return new ProductPurchaseLog(0, 0, purchaseQuantity);
+            return new ProductPurchaseLog(this.product.getProductInfo(), 0, 0, purchaseQuantity);
         }
         ProductPurchaseLog productPurchaseLog = createProductPurchaseLog(purchaseItem, now);
         reduceQuantity(purchaseItem);
@@ -45,6 +45,7 @@ public class PromotionProduct {
 
     private ProductPurchaseLog createProductPurchaseLog(PurchaseItem purchaseItem, LocalDate now) {
         return new ProductPurchaseLog(
+                this.product.getProductInfo(),
                 promotion.calculateApplicablePromotionProductQuantity(
                         this.quantity,
                         purchaseItem.getPurchaseQuantity(),

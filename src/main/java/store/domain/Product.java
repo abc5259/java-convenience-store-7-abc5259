@@ -34,7 +34,9 @@ public class Product {
 
     public ProductPurchaseLog purchase(PurchaseItem purchaseItem) {
         validatePurchaseQuantity(purchaseItem.getPurchaseQuantity());
-        ProductPurchaseLog productPurchaseLog = new ProductPurchaseLog(0, 0, purchaseItem.getPurchaseQuantity());
+        ProductPurchaseLog productPurchaseLog = new ProductPurchaseLog(
+                new ProductInfo(name, price),
+                0, 0, purchaseItem.getPurchaseQuantity());
         reduceQuantity(purchaseItem);
         return productPurchaseLog;
     }
@@ -61,6 +63,10 @@ public class Product {
 
     public int getPrice() {
         return price;
+    }
+
+    public ProductInfo getProductInfo() {
+        return new ProductInfo(name, price);
     }
 
     @Override
