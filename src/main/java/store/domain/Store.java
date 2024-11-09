@@ -29,11 +29,12 @@ public class Store {
         return PromotionNoticeResult.from(name, purchaseQuantity, adjustedPromotionProductQuantity);
     }
 
-    public Receipt purchaseProducts(List<PurchaseItem> purchaseItems, LocalDate purchaseDate) {
+    public Receipt purchaseProducts(List<PurchaseItem> purchaseItems, boolean isApplicableMembership,
+                                    LocalDate purchaseDate) {
         List<ProductPurchaseLog> productPurchaseLogs = purchaseItems.stream()
                 .map(purchaseItem -> purchaseProduct(purchaseItem, purchaseDate))
                 .toList();
-        return new Receipt(productPurchaseLogs);
+        return new Receipt(productPurchaseLogs, isApplicableMembership);
     }
 
     private ProductPurchaseLog purchaseProduct(PurchaseItem purchaseItem, LocalDate purchaseDate) {

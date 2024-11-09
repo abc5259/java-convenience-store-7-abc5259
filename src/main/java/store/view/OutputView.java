@@ -15,8 +15,6 @@ public class OutputView {
     private static final String RECEIPT_FORMAT = "%-16s %-6s %-10s%n";
     private static final DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
-    //상품명
-    //콜라
     public void printStartMessage() {
         System.out.println("안녕하세요. W편의점입니다.\n현재 보유하고 있는 상품입니다.");
         printEmptyLine();
@@ -62,7 +60,9 @@ public class OutputView {
         System.out.printf(RECEIPT_FORMAT, "총구매액", receipt.getTotalQuantity(),
                 decimalFormat.format(receipt.getTotalPrice()));
         System.out.printf(RECEIPT_FORMAT, "행사할인", "",
-                decimalFormat.format(-1 * receipt.getTotalGiveawayProductPrice()));
+                "-" + decimalFormat.format(receipt.getTotalGiveawayProductPrice()));
+        System.out.printf(RECEIPT_FORMAT, "멤버십할인", "",
+                "-" + decimalFormat.format(receipt.getMembershipDiscountPrice()));
         System.out.printf(RECEIPT_FORMAT, "내실돈", "", decimalFormat.format(receipt.getLastPrice()));
     }
 

@@ -30,4 +30,10 @@ public class InputView {
 
         throw new IllegalArgumentException("추가 요청 사항이 없습니다.");
     }
+
+    public String inputMembershipDiscountRequest() {
+        System.out.println();
+        System.out.println("멤버십 할인을 받으시겠습니까? (Y/N)");
+        return Console.readLine();
+    }
 }

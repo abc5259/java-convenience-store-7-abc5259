@@ -57,8 +57,10 @@ public class ConvenienceSystemRunner {
             }
         }
 
+        Answer membershipDiscountAnswer = inputMembershipDiscountRequest();
         List<PurchaseItem> purchaseItems = promotionNoticeResults.keySet().stream().toList();
-        Receipt receipt = store.purchaseProducts(purchaseItems, DateTimes.now().toLocalDate());
+        Receipt receipt = store.purchaseProducts(purchaseItems, membershipDiscountAnswer.toBoolean(),
+                DateTimes.now().toLocalDate());
         outputView.printReceipt(receipt);
     }
 
@@ -66,6 +68,18 @@ public class ConvenienceSystemRunner {
         while (true) {
             try {
                 String result = inputView.inputExtraPromotionNoticeRequest(promotionNoticeResult);
+                StringToAnswerConverter stringToAnswerConverter = new StringToAnswerConverter();
+                return stringToAnswerConverter.convert(result);
+            } catch (IllegalArgumentException exception) {
+                outputView.printErrorMessage(exception.getMessage());
+            }
+        }
+    }
+
+    private Answer inputMembershipDiscountRequest() {
+        while (true) {
+            try {
+                String result = inputView.inputMembershipDiscountRequest();
                 StringToAnswerConverter stringToAnswerConverter = new StringToAnswerConverter();
                 return stringToAnswerConverter.convert(result);
             } catch (IllegalArgumentException exception) {
