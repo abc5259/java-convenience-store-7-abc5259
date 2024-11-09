@@ -29,13 +29,20 @@ public class Store {
         return PromotionNoticeResult.from(name, purchaseQuantity, adjustedPromotionProductQuantity);
     }
 
-    public ProductPurchaseLog purchaseProduct(PurchaseItem purchaseItem, LocalDate now) {
+    public Receipt purchaseProducts(List<PurchaseItem> purchaseItems, LocalDate purchaseDate) {
+        List<ProductPurchaseLog> productPurchaseLogs = purchaseItems.stream()
+                .map(purchaseItem -> purchaseProduct(purchaseItem, purchaseDate))
+                .toList();
+        return new Receipt(productPurchaseLogs);
+    }
+
+    private ProductPurchaseLog purchaseProduct(PurchaseItem purchaseItem, LocalDate purchaseDate) {
         validatePurchase(purchaseItem.getName(), purchaseItem.getPurchaseQuantity());
         Product product = findProductOrElseThrow(purchaseItem.getName());
         PromotionProduct productPromotion = productPromotions.get(product);
 
         if (productPromotion != null) {
-            return productPromotion.purchase(purchaseItem, now);
+            return productPromotion.purchase(purchaseItem, purchaseDate);
         }
 
         return product.purchase(purchaseItem);

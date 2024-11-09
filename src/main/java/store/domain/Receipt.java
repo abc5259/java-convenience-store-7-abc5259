@@ -1,7 +1,13 @@
 package store.domain;
 
-import java.util.Map;
+import java.util.List;
 
 public class Receipt {
-    Map<Product, ProductPurchaseLog> productPurchaseLogs;
+    private final List<ProductPurchaseLog> productPurchaseLogs;
+
+    public Receipt(List<ProductPurchaseLog> productPurchaseLogs) {
+        this.productPurchaseLogs = productPurchaseLogs;
+    }
+
+
 }

@@ -29,31 +29,31 @@ public class PromotionProduct {
     }
 
 
-    public ProductPurchaseLog purchase(PurchaseItem purchaseItem, LocalDate now) {
+    public ProductPurchaseLog purchase(PurchaseItem purchaseItem, LocalDate purchaseDate) {
         validatePurchaseQuantity(purchaseItem.getPurchaseQuantity());
-        if (isNotApplicablePromotion(now)) {
+        if (isNotApplicablePromotion(purchaseDate)) {
             int purchaseQuantity = purchaseItem.getPurchaseQuantity();
             product.reduceQuantity(purchaseItem);
             reduceQuantity(purchaseItem);
             return new ProductPurchaseLog(this.product.getProductInfo(), 0, 0, purchaseQuantity);
         }
-        ProductPurchaseLog productPurchaseLog = createProductPurchaseLog(purchaseItem, now);
+        ProductPurchaseLog productPurchaseLog = createProductPurchaseLog(purchaseItem, purchaseDate);
         reduceQuantity(purchaseItem);
         product.reduceQuantity(purchaseItem);
         return productPurchaseLog;
     }
 
-    private ProductPurchaseLog createProductPurchaseLog(PurchaseItem purchaseItem, LocalDate now) {
+    private ProductPurchaseLog createProductPurchaseLog(PurchaseItem purchaseItem, LocalDate purchaseDate) {
         return new ProductPurchaseLog(
                 this.product.getProductInfo(),
                 promotion.calculateApplicablePromotionProductQuantity(
                         this.quantity,
                         purchaseItem.getPurchaseQuantity(),
-                        now),
+                        purchaseDate),
                 promotion.calculateGiveawayProductQuantity(
                         this.quantity,
                         purchaseItem.getPurchaseQuantity(),
-                        now),
+                        purchaseDate),
                 purchaseItem.getPurchaseQuantity());
     }
 
