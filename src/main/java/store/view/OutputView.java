@@ -34,13 +34,14 @@ public class OutputView {
     }
 
     private void printPurchaseProducts(List<ProductPurchaseLog> productPurchaseLogs) {
+        printEmptyLine();
         System.out.println("==============W 편의점================");
-        System.out.printf(RECEIPT_FORMAT, "금액", "수량", "상품명");
+        System.out.printf(RECEIPT_FORMAT, "상품명", "수량", "금액");
         productPurchaseLogs.forEach(purchaseLog -> {
             System.out.printf(RECEIPT_FORMAT,
                     purchaseLog.getProductName(),
                     purchaseLog.purchaseQuantity(),
-                    purchaseLog.calculateTotalPrice());
+                    decimalFormat.format(purchaseLog.calculateTotalPrice()));
         });
     }
 
@@ -64,6 +65,7 @@ public class OutputView {
         System.out.printf(RECEIPT_FORMAT, "멤버십할인", "",
                 "-" + decimalFormat.format(receipt.getMembershipDiscountPrice()));
         System.out.printf(RECEIPT_FORMAT, "내실돈", "", decimalFormat.format(receipt.getLastPrice()));
+        System.out.println();
     }
 
     public void printErrorMessage(String message) {

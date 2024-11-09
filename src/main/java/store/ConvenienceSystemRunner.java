@@ -36,38 +36,55 @@ public class ConvenienceSystemRunner {
 
     public void run() {
         Store store = initStore();
-        outputView.printStartMessage();
-        outputView.printProducts(store);
+        Answer gameOverAnswer;
+        do {
+            outputView.printStartMessage();
+            outputView.printProducts(store);
 
-        Map<PurchaseItem, PromotionNoticeResult> promotionNoticeResults = getPromotionNoticeResults(store);
-        for (Entry<PurchaseItem, PromotionNoticeResult> entry : promotionNoticeResults.entrySet()) {
-            PurchaseItem purchaseItem = entry.getKey();
-            PromotionNoticeResult promotionNoticeResult = entry.getValue();
-            if (promotionNoticeResult.promotionNoticeType() == MORE_QUANTITY) {
-                Answer answer = inputExtraPromotionNoticeResult(promotionNoticeResult);
-                if (answer == YES) {
-                    purchaseItem.increaseQuantity(promotionNoticeResult.productQuantity());
+            Map<PurchaseItem, PromotionNoticeResult> promotionNoticeResults = getPromotionNoticeResults(store);
+            for (Entry<PurchaseItem, PromotionNoticeResult> entry : promotionNoticeResults.entrySet()) {
+                PurchaseItem purchaseItem = entry.getKey();
+                PromotionNoticeResult promotionNoticeResult = entry.getValue();
+                if (promotionNoticeResult.promotionNoticeType() == MORE_QUANTITY) {
+                    Answer answer = inputExtraPromotionNoticeResult(promotionNoticeResult);
+                    if (answer == YES) {
+                        purchaseItem.increaseQuantity(promotionNoticeResult.productQuantity());
+                    }
+                }
+                if (promotionNoticeResult.promotionNoticeType() == NOT_APPLIED_QUANTITY) {
+                    Answer answer = inputExtraPromotionNoticeResult(promotionNoticeResult);
+                    if (answer == NO) {
+                        purchaseItem.reduceQuantity(promotionNoticeResult.productQuantity());
+                    }
                 }
             }
-            if (promotionNoticeResult.promotionNoticeType() == NOT_APPLIED_QUANTITY) {
-                Answer answer = inputExtraPromotionNoticeResult(promotionNoticeResult);
-                if (answer == NO) {
-                    purchaseItem.reduceQuantity(promotionNoticeResult.productQuantity());
-                }
-            }
-        }
 
-        Answer membershipDiscountAnswer = inputMembershipDiscountRequest();
-        List<PurchaseItem> purchaseItems = promotionNoticeResults.keySet().stream().toList();
-        Receipt receipt = store.purchaseProducts(purchaseItems, membershipDiscountAnswer.toBoolean(),
-                DateTimes.now().toLocalDate());
-        outputView.printReceipt(receipt);
+            Answer membershipDiscountAnswer = inputMembershipDiscountRequest();
+            List<PurchaseItem> purchaseItems = promotionNoticeResults.keySet().stream().toList();
+            Receipt receipt = store.purchaseProducts(purchaseItems, membershipDiscountAnswer.toBoolean(),
+                    DateTimes.now().toLocalDate());
+            outputView.printReceipt(receipt);
+
+            gameOverAnswer = inputMorePurchaseProducts();
+        } while (gameOverAnswer.toBoolean());
     }
 
     private Answer inputExtraPromotionNoticeResult(PromotionNoticeResult promotionNoticeResult) {
         while (true) {
             try {
                 String result = inputView.inputExtraPromotionNoticeRequest(promotionNoticeResult);
+                StringToAnswerConverter stringToAnswerConverter = new StringToAnswerConverter();
+                return stringToAnswerConverter.convert(result);
+            } catch (IllegalArgumentException exception) {
+                outputView.printErrorMessage(exception.getMessage());
+            }
+        }
+    }
+
+    private Answer inputMorePurchaseProducts() {
+        while (true) {
+            try {
+                String result = inputView.inputMorePurchaseProducts();
                 StringToAnswerConverter stringToAnswerConverter = new StringToAnswerConverter();
                 return stringToAnswerConverter.convert(result);
             } catch (IllegalArgumentException exception) {
