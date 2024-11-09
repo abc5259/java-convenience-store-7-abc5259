@@ -7,7 +7,6 @@ import static store.domain.PromotionNoticeType.NOT_APPLIED_QUANTITY;
 
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -122,15 +121,7 @@ public class ConvenienceSystemRunner {
                         .map(String::trim)
                         .map(converter::convert)
                         .toList();
-                Map<PurchaseItem, PromotionNoticeResult> promotionNoticeResultMap = new HashMap<>();
-                for (PurchaseItem purchaseItem : purchaseItems) {
-                    PromotionNoticeResult promotionNoticeResult = store.calculatePromotionNoticeResult(
-                            purchaseItem.getName(),
-                            purchaseItem.getPurchaseQuantity(),
-                            DateTimes.now().toLocalDate());
-                    promotionNoticeResultMap.put(purchaseItem, promotionNoticeResult);
-                }
-                return promotionNoticeResultMap;
+                return store.calculatePromotionNoticeResults(purchaseItems, DateTimes.now().toLocalDate());
             } catch (IllegalArgumentException exception) {
                 outputView.printErrorMessage(exception.getMessage());
             }

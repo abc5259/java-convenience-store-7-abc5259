@@ -1,6 +1,7 @@
 package store.domain;
 
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import store.exception.NonExistProductException;
@@ -13,6 +14,20 @@ public class Store {
     public Store(Map<String, Product> products, Map<Product, PromotionProduct> productPromotions) {
         this.products = products;
         this.productPromotions = productPromotions;
+    }
+
+    public Map<PurchaseItem, PromotionNoticeResult> calculatePromotionNoticeResults(List<PurchaseItem> purchaseItems,
+                                                                                    LocalDate now) {
+        Map<PurchaseItem, PromotionNoticeResult> promotionNoticeResultMap = new LinkedHashMap<>();
+        for (PurchaseItem purchaseItem : purchaseItems) {
+            PromotionNoticeResult promotionNoticeResult = calculatePromotionNoticeResult(
+                    purchaseItem.getName(),
+                    purchaseItem.getPurchaseQuantity(),
+                    now);
+            promotionNoticeResultMap.put(purchaseItem, promotionNoticeResult);
+        }
+
+        return promotionNoticeResultMap;
     }
 
     public PromotionNoticeResult calculatePromotionNoticeResult(String name, int purchaseQuantity, LocalDate now) {
