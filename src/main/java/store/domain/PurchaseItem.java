@@ -24,6 +24,12 @@ public class PurchaseItem {
         this.purchaseQuantity += quantity;
     }
 
+    public void increaseQuantity(PurchaseItem purchaseItem) {
+        if (purchaseItem.isSameName(purchaseItem)) {
+            this.purchaseQuantity += purchaseItem.purchaseQuantity;
+        }
+    }
+
     public void reduceQuantity(int quantity) {
         this.purchaseQuantity -= quantity;
         this.purchaseQuantity = Math.max(0, this.purchaseQuantity);
@@ -35,5 +41,9 @@ public class PurchaseItem {
 
     public int getPurchaseQuantity() {
         return purchaseQuantity;
+    }
+
+    public boolean isSameName(PurchaseItem purchaseItem) {
+        return this.name.equals(purchaseItem.getName());
     }
 }

@@ -6,7 +6,7 @@ import static store.domain.PromotionNoticeType.MORE_QUANTITY;
 import static store.domain.PromotionNoticeType.NOT_APPLIED_QUANTITY;
 
 import camp.nextstep.edu.missionutils.DateTimes;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -117,10 +117,18 @@ public class ConvenienceSystemRunner {
                 String[] items = inputView.inputPurchaseItems().split(",");
                 validateLength(items);
                 StringToPurchaseItemConverter converter = new StringToPurchaseItemConverter();
-                List<PurchaseItem> purchaseItems = Arrays.stream(items)
-                        .map(String::trim)
-                        .map(converter::convert)
-                        .toList();
+                List<PurchaseItem> purchaseItems = new ArrayList<>();
+                for (String item : items) {
+                    PurchaseItem newPurchaseItem = converter.convert(item.trim());
+
+                    purchaseItems.stream()
+                            .filter(purchaseItem -> purchaseItem.isSameName(newPurchaseItem))
+                            .findFirst()
+                            .ifPresentOrElse(
+                                    purchaseItem -> purchaseItem.increaseQuantity(newPurchaseItem),
+                                    () -> purchaseItems.add(newPurchaseItem)
+                            );
+                }
                 return store.calculatePromotionNoticeResults(purchaseItems, DateTimes.now().toLocalDate());
             } catch (IllegalArgumentException exception) {
                 outputView.printErrorMessage(exception.getMessage());
