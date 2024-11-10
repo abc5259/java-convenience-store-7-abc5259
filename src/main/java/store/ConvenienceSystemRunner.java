@@ -14,6 +14,7 @@ import store.domain.PromotionNoticeResult;
 import store.domain.PurchaseItem;
 import store.domain.Receipt;
 import store.domain.Store;
+import store.io.FileReader;
 import store.io.ProductsInitializer;
 import store.io.PromotionsInitializer;
 import store.view.OutputView;
@@ -36,9 +37,10 @@ public class ConvenienceSystemRunner {
     }
 
     private Store initStore() {
-        PromotionsInitializer promotionsInitializer = new PromotionsInitializer();
+        FileReader fileReader = new FileReader();
+        PromotionsInitializer promotionsInitializer = new PromotionsInitializer(fileReader);
         Map<String, Promotion> promotions = promotionsInitializer.initialize();
-        ProductsInitializer productsInitializer = new ProductsInitializer();
+        ProductsInitializer productsInitializer = new ProductsInitializer(fileReader);
         return productsInitializer.initialize(promotions);
     }
 

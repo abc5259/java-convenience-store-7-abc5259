@@ -1,8 +1,5 @@
 package store.io;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
@@ -13,9 +10,14 @@ import store.domain.Promotion;
 public class PromotionsInitializer {
 
     private static final Path PRODUCT_PATH = Path.of("src/main/resources/promotions.md");
+    private final FileReader fileReader;
+
+    public PromotionsInitializer(FileReader fileReader) {
+        this.fileReader = fileReader;
+    }
 
     public Map<String, Promotion> initialize() {
-        List<String> promotionInfoLines = readAllPromotionInfoLines();
+        List<String> promotionInfoLines = fileReader.readAllLines(PRODUCT_PATH);
         return promotionInfoLines.stream()
                 .map(line -> line.split(","))
                 .map(promotionInfo -> new Promotion(
@@ -29,16 +31,5 @@ public class PromotionsInitializer {
                         Promotion::getName,
                         promotion -> promotion
                 ));
-    }
-
-    private List<String> readAllPromotionInfoLines() {
-        List<String> lines;
-        try {
-            lines = Files.readAllLines(PRODUCT_PATH, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        lines.removeFirst(); // 첫 컬럼명 제거
-        return lines;
     }
 }

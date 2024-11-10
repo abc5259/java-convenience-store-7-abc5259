@@ -1,8 +1,5 @@
 package store.io;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,10 +12,14 @@ import store.domain.Store;
 public class ProductsInitializer {
 
     private static final Path PRODUCT_PATH = Path.of("src/main/resources/products.md");
+    private final FileReader fileReader;
+
+    public ProductsInitializer(FileReader fileReader) {
+        this.fileReader = fileReader;
+    }
 
     public Store initialize(Map<String, Promotion> promotions) {
-        //TODO: 함수 10줄로 줄이기
-        List<String> productInfoLines = readAllProductInfoLines();
+        List<String> productInfoLines = fileReader.readAllLines(PRODUCT_PATH);
 
         Map<String, Product> products = new LinkedHashMap<>();
         Map<Product, PromotionProduct> PromotionProducts = new LinkedHashMap<>();
@@ -43,15 +44,5 @@ public class ProductsInitializer {
             }
         }
         return new Store(products, PromotionProducts);
-    }
-
-    private List<String> readAllProductInfoLines() {
-        try {
-            List<String> lines = Files.readAllLines(PRODUCT_PATH, StandardCharsets.UTF_8);
-            lines.removeFirst(); // 첫 컬럼명 제거
-            return lines;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
