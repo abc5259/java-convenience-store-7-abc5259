@@ -4,22 +4,20 @@ import java.time.LocalDate;
 
 public class Promotion {
 
-    private String name;
-    private int buyCount;
-    private int getCount;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private final String name;
+    private final int buyCount;
+    private final int getCount;
+    private final Period period;
 
     public Promotion(String name, int buyCount, int getCount, LocalDate startDate, LocalDate endDate) {
         this.name = name;
         this.buyCount = buyCount;
         this.getCount = getCount;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        period = new Period(startDate, endDate);
     }
 
     public boolean isApplicable(LocalDate currentDate) {
-        return isInDate(currentDate);
+        return period.isWithin(currentDate);
     }
 
     /**
@@ -79,22 +77,7 @@ public class Promotion {
         return remainder == buyCount && purchaseQuantity + getCount <= promotionProductQuantity;
     }
 
-    private boolean isInDate(LocalDate targetDate) {
-        return !targetDate.isBefore(startDate) && !targetDate.isAfter(endDate);
-    }
-
     public String getName() {
         return name;
-    }
-
-    @Override
-    public String toString() {
-        return "Promotion{" +
-                "name='" + name + '\'' +
-                ", buyCount=" + buyCount +
-                ", getCount=" + getCount +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
     }
 }

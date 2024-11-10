@@ -4,15 +4,14 @@ import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import store.exception.NonExistProductException;
 
 public class Store {
 
-    private final Map<String, Product> products;
+    private final ProductReader productReader;
     private final Map<Product, PromotionProduct> productPromotions;
 
     public Store(Map<String, Product> products, Map<Product, PromotionProduct> productPromotions) {
-        this.products = products;
+        this.productReader = new ProductReader(products);
         this.productPromotions = productPromotions;
     }
 
@@ -32,7 +31,7 @@ public class Store {
 
     public PromotionNoticeResult calculatePromotionNoticeResult(String name, int purchaseQuantity, LocalDate now) {
         validatePurchase(name, purchaseQuantity);
-        Product product = findProductOrElseThrow(name);
+        Product product = productReader.findProductOrElseThrow(name);
         PromotionProduct productPromotion = productPromotions.get(product);
 
         if (productPromotion == null || productPromotion.isNotApplicablePromotion(now)) {
@@ -54,7 +53,7 @@ public class Store {
 
     private ProductPurchaseLog purchaseProduct(PurchaseItem purchaseItem, LocalDate purchaseDate) {
         validatePurchase(purchaseItem.getName(), purchaseItem.getPurchaseQuantity());
-        Product product = findProductOrElseThrow(purchaseItem.getName());
+        Product product = productReader.findProductOrElseThrow(purchaseItem.getName());
         PromotionProduct productPromotion = productPromotions.get(product);
 
         if (productPromotion != null) {
@@ -65,17 +64,9 @@ public class Store {
     }
 
     private void validatePurchase(String name, int purchaseQuantity) {
-        Product product = findProductOrElseThrow(name);
+        Product product = productReader.findProductOrElseThrow(name);
         PromotionProduct productPromotion = productPromotions.get(product);
         validatePurchaseQuantity(purchaseQuantity, productPromotion, product);
-    }
-
-    private Product findProductOrElseThrow(String name) {
-        Product product = products.get(name);
-        if (product == null) {
-            throw new NonExistProductException();
-        }
-        return product;
     }
 
     private void validatePurchaseQuantity(int purchaseQuantity, PromotionProduct productPromotion, Product product) {
@@ -88,7 +79,7 @@ public class Store {
     }
 
     public List<Product> getProducts() {
-        return List.copyOf(products.values());
+        return productReader.findAllProducts();
     }
 
     public PromotionProduct getPromotionProduct(Product product) {
