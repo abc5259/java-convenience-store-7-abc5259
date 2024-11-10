@@ -6,11 +6,8 @@ import static store.domain.PromotionNoticeType.MORE_QUANTITY;
 import static store.domain.PromotionNoticeType.NOT_APPLIED_QUANTITY;
 
 import camp.nextstep.edu.missionutils.DateTimes;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import store.converter.StringToAnswerConverter;
-import store.converter.StringToPurchaseItemConverter;
 import store.domain.Answer;
 import store.domain.Promotion;
 import store.domain.PromotionNoticeResult;
@@ -19,16 +16,15 @@ import store.domain.Receipt;
 import store.domain.Store;
 import store.io.ProductsInitializer;
 import store.io.PromotionsInitializer;
-import store.view.InputView;
 import store.view.OutputView;
 
 public class ConvenienceSystemRunner {
-
-    private final InputView inputView;
+    private final IteratorInputHandler iteratorInputHandler;
     private final OutputView outputView;
 
-    public ConvenienceSystemRunner(InputView inputView, OutputView outputView) {
-        this.inputView = inputView;
+    public ConvenienceSystemRunner(IteratorInputHandler iteratorInputHandler,
+                                   OutputView outputView) {
+        this.iteratorInputHandler = iteratorInputHandler;
         this.outputView = outputView;
     }
 
@@ -39,68 +35,21 @@ public class ConvenienceSystemRunner {
             outputView.printStartMessage();
             outputView.printProducts(store);
 
-            Map<PurchaseItem, PromotionNoticeResult> promotionNoticeResults = getPromotionNoticeResults(store);
+            Map<PurchaseItem, PromotionNoticeResult> promotionNoticeResults =
+                    iteratorInputHandler.calculatePromotionNoticeResults(store);
             promotionNoticeResults.forEach(this::noticePromotionResult);
 
-            Answer membershipDiscountAnswer = inputMembershipDiscountRequest();
+            Answer membershipDiscountAnswer = iteratorInputHandler.inputMembershipDiscountRequest();
+
             List<PurchaseItem> purchaseItems = promotionNoticeResults.keySet().stream().toList();
-            Receipt receipt = store.purchaseProducts(purchaseItems, membershipDiscountAnswer.toBoolean(),
+            Receipt receipt = store.purchaseProducts(
+                    purchaseItems,
+                    membershipDiscountAnswer.toBoolean(),
                     DateTimes.now().toLocalDate());
             outputView.printReceipt(receipt);
 
-            gameOverAnswer = inputMorePurchaseProducts();
+            gameOverAnswer = iteratorInputHandler.inputMorePurchaseProducts();
         } while (gameOverAnswer.toBoolean());
-    }
-
-    private void noticePromotionResult(PurchaseItem purchaseItem, PromotionNoticeResult promotionNoticeResult) {
-        if (promotionNoticeResult.promotionNoticeType() == MORE_QUANTITY) {
-            Answer answer = inputExtraPromotionNoticeResult(promotionNoticeResult);
-            if (answer == YES) {
-                purchaseItem.increaseQuantity(promotionNoticeResult.productQuantity());
-            }
-        }
-        if (promotionNoticeResult.promotionNoticeType() == NOT_APPLIED_QUANTITY) {
-            Answer answer = inputExtraPromotionNoticeResult(promotionNoticeResult);
-            if (answer == NO) {
-                purchaseItem.reduceQuantity(promotionNoticeResult.productQuantity());
-            }
-        }
-    }
-
-    private Answer inputExtraPromotionNoticeResult(PromotionNoticeResult promotionNoticeResult) {
-        while (true) {
-            try {
-                String result = inputView.inputExtraPromotionNoticeRequest(promotionNoticeResult);
-                StringToAnswerConverter stringToAnswerConverter = new StringToAnswerConverter();
-                return stringToAnswerConverter.convert(result);
-            } catch (IllegalArgumentException exception) {
-                outputView.printErrorMessage(exception.getMessage());
-            }
-        }
-    }
-
-    private Answer inputMorePurchaseProducts() {
-        while (true) {
-            try {
-                String result = inputView.inputMorePurchaseProducts();
-                StringToAnswerConverter stringToAnswerConverter = new StringToAnswerConverter();
-                return stringToAnswerConverter.convert(result);
-            } catch (IllegalArgumentException exception) {
-                outputView.printErrorMessage(exception.getMessage());
-            }
-        }
-    }
-
-    private Answer inputMembershipDiscountRequest() {
-        while (true) {
-            try {
-                String result = inputView.inputMembershipDiscountRequest();
-                StringToAnswerConverter stringToAnswerConverter = new StringToAnswerConverter();
-                return stringToAnswerConverter.convert(result);
-            } catch (IllegalArgumentException exception) {
-                outputView.printErrorMessage(exception.getMessage());
-            }
-        }
     }
 
     private Store initStore() {
@@ -110,39 +59,18 @@ public class ConvenienceSystemRunner {
         return productsInitializer.initialize(promotions);
     }
 
-    public Map<PurchaseItem, PromotionNoticeResult> getPromotionNoticeResults(Store store) {
-        while (true) {
-            try {
-                String[] items = inputView.inputPurchaseItems().split(",");
-                validateLength(items);
-                StringToPurchaseItemConverter converter = new StringToPurchaseItemConverter();
-                List<PurchaseItem> purchaseItems = createPurchaseItems(items, converter);
-                return store.calculatePromotionNoticeResults(purchaseItems, DateTimes.now().toLocalDate());
-            } catch (IllegalArgumentException exception) {
-                outputView.printErrorMessage(exception.getMessage());
+    private void noticePromotionResult(PurchaseItem purchaseItem, PromotionNoticeResult promotionNoticeResult) {
+        if (promotionNoticeResult.promotionNoticeType() == MORE_QUANTITY) {
+            Answer answer = iteratorInputHandler.inputExtraPromotionNoticeResult(promotionNoticeResult);
+            if (answer == YES) {
+                purchaseItem.increaseQuantity(promotionNoticeResult.productQuantity());
             }
         }
-    }
-
-    private List<PurchaseItem> createPurchaseItems(String[] items, StringToPurchaseItemConverter converter) {
-        List<PurchaseItem> purchaseItems = new ArrayList<>();
-        for (String item : items) {
-            PurchaseItem newPurchaseItem = converter.convert(item.trim());
-
-            purchaseItems.stream()
-                    .filter(purchaseItem -> purchaseItem.isSameName(newPurchaseItem))
-                    .findFirst()
-                    .ifPresentOrElse(
-                            purchaseItem -> purchaseItem.increaseQuantity(newPurchaseItem),
-                            () -> purchaseItems.add(newPurchaseItem)
-                    );
-        }
-        return purchaseItems;
-    }
-
-    private void validateLength(String[] items) {
-        if (items.length == 0) {
-            throw new IllegalArgumentException("값을 입력하세요");
+        if (promotionNoticeResult.promotionNoticeType() == NOT_APPLIED_QUANTITY) {
+            Answer answer = iteratorInputHandler.inputExtraPromotionNoticeResult(promotionNoticeResult);
+            if (answer == NO) {
+                purchaseItem.reduceQuantity(promotionNoticeResult.productQuantity());
+            }
         }
     }
 }

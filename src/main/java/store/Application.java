@@ -7,7 +7,9 @@ public class Application {
     public static void main(String[] args) {
         InputView inputView = new InputView();
         OutputView outputView = new OutputView();
-        ConvenienceSystemRunner convenienceSystemRunner = new ConvenienceSystemRunner(inputView, outputView);
+        IteratorInputTemplate iteratorInputTemplate = new IteratorInputTemplate(outputView);
+        IteratorInputHandler iteratorInputHandler = new IteratorInputHandler(inputView, iteratorInputTemplate);
+        ConvenienceSystemRunner convenienceSystemRunner = new ConvenienceSystemRunner(iteratorInputHandler, outputView);
         convenienceSystemRunner.run();
     }
 }
