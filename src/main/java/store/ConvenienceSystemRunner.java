@@ -30,26 +30,9 @@ public class ConvenienceSystemRunner {
 
     public void run() {
         Store store = initStore();
-        Answer gameOverAnswer;
         do {
-            outputView.printStartMessage();
-            outputView.printProducts(store);
-
-            Map<PurchaseItem, PromotionNoticeResult> promotionNoticeResults =
-                    iteratorInputHandler.calculatePromotionNoticeResults(store);
-            promotionNoticeResults.forEach(this::noticePromotionResult);
-
-            Answer membershipDiscountAnswer = iteratorInputHandler.inputMembershipDiscountRequest();
-
-            List<PurchaseItem> purchaseItems = promotionNoticeResults.keySet().stream().toList();
-            Receipt receipt = store.purchaseProducts(
-                    purchaseItems,
-                    membershipDiscountAnswer.toBoolean(),
-                    DateTimes.now().toLocalDate());
-            outputView.printReceipt(receipt);
-
-            gameOverAnswer = iteratorInputHandler.inputMorePurchaseProducts();
-        } while (gameOverAnswer.toBoolean());
+            processConvenienceSystem(store);
+        } while ((iteratorInputHandler.inputMorePurchaseProducts()).toBoolean());
     }
 
     private Store initStore() {
@@ -57,6 +40,23 @@ public class ConvenienceSystemRunner {
         Map<String, Promotion> promotions = promotionsInitializer.initialize();
         ProductsInitializer productsInitializer = new ProductsInitializer();
         return productsInitializer.initialize(promotions);
+    }
+
+    private void processConvenienceSystem(Store store) {
+        printStartMessages(store);
+
+        Map<PurchaseItem, PromotionNoticeResult> promotionNoticeResults =
+                iteratorInputHandler.calculatePromotionNoticeResults(store);
+        promotionNoticeResults.forEach(this::noticePromotionResult);
+
+        Answer membershipDiscountAnswer = iteratorInputHandler.inputMembershipDiscountRequest();
+
+        printReceipt(promotionNoticeResults, store, membershipDiscountAnswer);
+    }
+
+    private void printStartMessages(Store store) {
+        outputView.printStartMessage();
+        outputView.printProducts(store);
     }
 
     private void noticePromotionResult(PurchaseItem purchaseItem, PromotionNoticeResult promotionNoticeResult) {
@@ -72,5 +72,16 @@ public class ConvenienceSystemRunner {
                 purchaseItem.reduceQuantity(promotionNoticeResult.productQuantity());
             }
         }
+    }
+
+    private void printReceipt(Map<PurchaseItem, PromotionNoticeResult> promotionNoticeResults,
+                              Store store,
+                              Answer membershipDiscountAnswer) {
+        List<PurchaseItem> purchaseItems = promotionNoticeResults.keySet().stream().toList();
+        Receipt receipt = store.purchaseProducts(
+                purchaseItems,
+                membershipDiscountAnswer.toBoolean(),
+                DateTimes.now().toLocalDate());
+        outputView.printReceipt(receipt);
     }
 }
