@@ -71,13 +71,4 @@ public class PromotionProduct {
     public int getQuantity() {
         return quantity;
     }
-
-    @Override
-    public String toString() {
-        return "ProductPromotion{" +
-                "product=" + product +
-                ", promotion=" + promotion +
-                ", quantity=" + quantity +
-                '}';
-    }
 }

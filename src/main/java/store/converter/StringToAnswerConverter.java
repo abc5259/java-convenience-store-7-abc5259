@@ -1,6 +1,7 @@
 package store.converter;
 
 import store.domain.Answer;
+import store.exception.ErrorMessage;
 
 public class StringToAnswerConverter implements Converter<String, Answer> {
     @Override
@@ -14,12 +15,12 @@ public class StringToAnswerConverter implements Converter<String, Answer> {
             return Answer.NO;
         }
 
-        throw new IllegalArgumentException("잘못된 입력입니다.");
+        throw new IllegalArgumentException(ErrorMessage.INVALID_FORMAT_MESSAGE.getMessage());
     }
 
     private void validate(String source) {
         if (source == null || source.isEmpty()) {
-            throw new IllegalArgumentException("잘못된 입력입니다.");
+            throw new IllegalArgumentException(ErrorMessage.INVALID_FORMAT_MESSAGE.getMessage());
         }
     }
 }

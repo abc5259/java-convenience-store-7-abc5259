@@ -1,5 +1,7 @@
 package store.domain;
 
+import store.exception.ErrorMessage;
+
 public class PurchaseItem {
     private final String name;
     private int purchaseQuantity;
@@ -12,11 +14,11 @@ public class PurchaseItem {
 
     private void validate(String name, int purchaseQuantity) {
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("올바르지 않은 형식으로 입력했습니다.");
+            throw new IllegalArgumentException(ErrorMessage.INVALID_FORMAT_MESSAGE.getMessage());
         }
 
         if (purchaseQuantity <= 0) {
-            throw new IllegalArgumentException("잘못된 입력입니다.");
+            throw new IllegalArgumentException(ErrorMessage.INVALID_INPUT_MESSAGE.getMessage());
         }
     }
 
