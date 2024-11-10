@@ -12,7 +12,7 @@ public class Application {
             convenienceSystemRunner.run();
         } catch (RuntimeException e) {
             System.out.println(e.getMessage());
-            throw new IllegalArgumentException(e.getMessage());
+//            throw new IllegalArgumentException(e.getMessage());
         }
     }
 }
