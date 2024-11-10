@@ -12,7 +12,7 @@ public class OutputView {
     private static final String PRODUCT_INFO_FORMAT = "- %s %,d원 %s%n";
     private static final String PROMOTION_PRODUCT_INFO_FORMAT = "- %s %,d원 %s %s%n";
     private static final String ERROR_MESSAGE_FORMAT = "[ERROR] %s 다시 입력해 주세요.%n";
-    private static final String RECEIPT_FORMAT = "%-16s %-6s %-10s%n";
+    private static final String RECEIPT_FORMAT = "%-16s\t%-6s\t%-10s%n";
     private static final DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
     public void printStartMessage() {
@@ -40,7 +40,7 @@ public class OutputView {
         productPurchaseLogs.forEach(purchaseLog -> {
             System.out.printf(RECEIPT_FORMAT,
                     purchaseLog.getProductName(),
-                    purchaseLog.purchaseQuantity(),
+                    decimalFormat.format(purchaseLog.purchaseQuantity()),
                     decimalFormat.format(purchaseLog.calculateTotalPrice()));
         });
     }
@@ -52,20 +52,20 @@ public class OutputView {
                 return;
             }
             System.out.printf(RECEIPT_FORMAT, purchaseLog.getProductName(),
-                    purchaseLog.giveawayProductQuantity(), "");
+                    decimalFormat.format(purchaseLog.giveawayProductQuantity()), "");
         });
     }
 
     private void printPrice(Receipt receipt) {
         System.out.println("====================================");
-        System.out.printf(RECEIPT_FORMAT, "총구매액", receipt.getTotalQuantity(),
+        System.out.printf(RECEIPT_FORMAT, "총구매액", decimalFormat.format(receipt.getTotalQuantity()),
                 decimalFormat.format(receipt.getTotalPrice()));
         System.out.printf(RECEIPT_FORMAT, "행사할인", "",
                 "-" + decimalFormat.format(receipt.getTotalGiveawayProductPrice()));
         System.out.printf(RECEIPT_FORMAT, "멤버십할인", "",
                 "-" + decimalFormat.format(receipt.getMembershipDiscountPrice()));
         System.out.printf(RECEIPT_FORMAT, "내실돈", "", decimalFormat.format(receipt.getLastPrice()));
-        System.out.println();
+        printEmptyLine();
     }
 
     public void printErrorMessage(String message) {
