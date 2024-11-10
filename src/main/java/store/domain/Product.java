@@ -68,13 +68,4 @@ public class Product {
     public ProductInfo getProductInfo() {
         return new ProductInfo(name, price);
     }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "name='" + name + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                '}';
-    }
 }

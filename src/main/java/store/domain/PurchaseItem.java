@@ -12,11 +12,11 @@ public class PurchaseItem {
 
     private void validate(String name, int purchaseQuantity) {
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("이름은 필수입니다.");
+            throw new IllegalArgumentException("올바르지 않은 형식으로 입력했습니다.");
         }
 
-        if (purchaseQuantity < 0) {
-            throw new IllegalArgumentException("구매 수량은 0보다 커야합니다.");
+        if (purchaseQuantity <= 0) {
+            throw new IllegalArgumentException("잘못된 입력입니다.");
         }
     }
 
