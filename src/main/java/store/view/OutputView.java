@@ -64,7 +64,7 @@ public class OutputView {
                 "-" + decimalFormat.format(receipt.getTotalGiveawayProductPrice()));
         System.out.printf(RECEIPT_FORMAT, "멤버십할인", "",
                 "-" + decimalFormat.format(receipt.getMembershipDiscountPrice()));
-        System.out.printf(RECEIPT_FORMAT, "내실돈", "", decimalFormat.format(receipt.getLastPrice()));
+        System.out.printf(RECEIPT_FORMAT, "내실돈", "", " " + decimalFormat.format(receipt.getLastPrice()));
         printEmptyLine();
     }
 
