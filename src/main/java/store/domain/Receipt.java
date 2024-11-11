@@ -1,14 +1,15 @@
 package store.domain;
 
 import java.util.List;
+import store.domain.discount.MembershipDiscountPolicy;
 
 public class Receipt {
     private final List<ProductPurchaseLog> productPurchaseLogs;
-    private final boolean isApplicableMemberShip;
+    private final MembershipDiscountPolicy membershipDiscountPolicy;
 
-    public Receipt(List<ProductPurchaseLog> productPurchaseLogs, boolean isApplicableMemberShip) {
+    public Receipt(List<ProductPurchaseLog> productPurchaseLogs, MembershipDiscountPolicy membershipDiscountPolicy) {
         this.productPurchaseLogs = productPurchaseLogs;
-        this.isApplicableMemberShip = isApplicableMemberShip;
+        this.membershipDiscountPolicy = membershipDiscountPolicy;
     }
 
     public int getTotalQuantity() {
@@ -36,16 +37,10 @@ public class Receipt {
     }
 
     public int getMembershipDiscountPrice() {
-        if (!isApplicableMemberShip) {
-            return 0;
-        }
-
-        int discountPrice = (int) (getTotalNotApplicablePromotionProductPrice() * 0.3);
-        return Math.min(discountPrice, 8000);
+        return membershipDiscountPolicy.getDiscountPrice(this);
     }
 
     public int getLastPrice() {
-        //TODO: 멤버십 할일해야함
         return getTotalPrice() - getTotalGiveawayProductPrice() - getMembershipDiscountPrice();
     }
 

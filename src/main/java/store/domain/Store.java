@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import store.domain.discount.AnswerDiscountCondition;
+import store.domain.discount.MembershipDiscountPolicy;
 
 public class Store {
 
@@ -43,12 +45,13 @@ public class Store {
         return PromotionNoticeResult.from(name, purchaseQuantity, adjustedPromotionProductQuantity);
     }
 
-    public Receipt purchaseProducts(List<PurchaseItem> purchaseItems, boolean isApplicableMembership,
+    public Receipt purchaseProducts(List<PurchaseItem> purchaseItems, Answer applicableMembershipAnswer,
                                     LocalDate purchaseDate) {
         List<ProductPurchaseLog> productPurchaseLogs = purchaseItems.stream()
                 .map(purchaseItem -> purchaseProduct(purchaseItem, purchaseDate))
                 .toList();
-        return new Receipt(productPurchaseLogs, isApplicableMembership);
+        return new Receipt(productPurchaseLogs,
+                new MembershipDiscountPolicy(new AnswerDiscountCondition(applicableMembershipAnswer)));
     }
 
     private ProductPurchaseLog purchaseProduct(PurchaseItem purchaseItem, LocalDate purchaseDate) {

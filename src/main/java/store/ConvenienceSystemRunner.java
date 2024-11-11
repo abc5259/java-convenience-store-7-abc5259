@@ -75,7 +75,7 @@ public class ConvenienceSystemRunner {
         List<PurchaseItem> purchaseItems = promotionNoticeResults.keySet().stream().toList();
         Receipt receipt = store.purchaseProducts(
                 purchaseItems,
-                membershipDiscountAnswer.toBoolean(),
+                membershipDiscountAnswer,
                 DateTimes.now().toLocalDate());
         outputView.printReceipt(receipt);
     }

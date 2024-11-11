@@ -38,7 +38,8 @@ public class StoreInitializer {
                 name -> new Product(name, tempProduct.price()));
     }
 
-    private void computePromotionProducts(Map<Product, PromotionProduct> PromotionProducts, TempProduct tempProduct,
+    private void computePromotionProducts(Map<Product, PromotionProduct> PromotionProducts,
+                                          TempProduct tempProduct,
                                           Product product) {
         if (tempProduct.isNotPromotion()) {
             product.increaseQuantity(tempProduct.quantity());
