@@ -1,6 +1,6 @@
 package store.initializer;
 
-public record ProductTemp(
+public record TempProduct(
         String name,
         int price,
         int quantity,

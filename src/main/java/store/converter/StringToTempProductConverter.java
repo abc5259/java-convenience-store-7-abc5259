@@ -1,13 +1,13 @@
 package store.converter;
 
 import store.exception.ErrorMessage;
-import store.initializer.ProductTemp;
+import store.initializer.TempProduct;
 
-public class StringToProductTempConverter implements Converter<String, ProductTemp> {
+public class StringToTempProductConverter implements Converter<String, TempProduct> {
     @Override
-    public ProductTemp convert(String source) {
+    public TempProduct convert(String source) {
         String[] productInfo = source.split(",");
-        return new ProductTemp(
+        return new TempProduct(
                 productInfo[0].trim(),
                 toInt(productInfo[1]),
                 toInt(productInfo[2]),

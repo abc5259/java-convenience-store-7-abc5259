@@ -8,8 +8,8 @@ import static store.domain.PromotionNoticeType.NOT_APPLIED_QUANTITY;
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.util.List;
 import java.util.Map;
-import store.converter.StringToProductTempConverter;
 import store.converter.StringToPromotionConverter;
+import store.converter.StringToTempProductConverter;
 import store.domain.Answer;
 import store.domain.Promotion;
 import store.domain.PromotionNoticeResult;
@@ -46,7 +46,7 @@ public class ConvenienceSystemRunner {
         Map<String, Promotion> promotions = promotionsInitializer.initialize();
         ProductsInitializer productsInitializer = new ProductsInitializer(
                 fileReader,
-                new StringToProductTempConverter());
+                new StringToTempProductConverter());
         return productsInitializer.initialize(promotions);
     }
 

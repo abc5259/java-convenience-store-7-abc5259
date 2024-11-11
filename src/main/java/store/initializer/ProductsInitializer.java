@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import store.converter.StringToProductTempConverter;
+import store.converter.StringToTempProductConverter;
 import store.domain.Product;
 import store.domain.Promotion;
 import store.domain.PromotionProduct;
@@ -16,11 +16,11 @@ public class ProductsInitializer {
     private static final Path PRODUCT_PATH = Path.of("src/main/resources/products.md");
 
     private final FileReader fileReader;
-    private final StringToProductTempConverter productTempConverter;
+    private final StringToTempProductConverter TempProductConverter;
 
-    public ProductsInitializer(FileReader fileReader, StringToProductTempConverter productTempConverter) {
+    public ProductsInitializer(FileReader fileReader, StringToTempProductConverter TempProductConverter) {
         this.fileReader = fileReader;
-        this.productTempConverter = productTempConverter;
+        this.TempProductConverter = TempProductConverter;
     }
 
     public Store initialize(Map<String, Promotion> promotions) {
@@ -29,21 +29,21 @@ public class ProductsInitializer {
         Map<String, Product> products = new LinkedHashMap<>();
         Map<Product, PromotionProduct> PromotionProducts = new LinkedHashMap<>();
         for (String productInfoLine : productInfoLines) {
-            ProductTemp productTemp = productTempConverter.convert(productInfoLine);
+            TempProduct tempProduct = TempProductConverter.convert(productInfoLine);
 
             Product product = products.getOrDefault(
-                    productTemp.name(),
-                    new Product(productTemp.name(), productTemp.price()));
+                    tempProduct.name(),
+                    new Product(tempProduct.name(), tempProduct.price()));
 
-            if (productTemp.isNotPromotion()) {
-                product.increaseQuantity(productTemp.quantity());
-                products.put(productTemp.name(), product);
+            if (tempProduct.isNotPromotion()) {
+                product.increaseQuantity(tempProduct.quantity());
+                products.put(tempProduct.name(), product);
                 continue;
             }
 
-            Promotion promotion = promotions.get(productTemp.promotionName());
-            PromotionProducts.put(product, new PromotionProduct(product, promotion, productTemp.quantity()));
-            products.put(productTemp.name(), product);
+            Promotion promotion = promotions.get(tempProduct.promotionName());
+            PromotionProducts.put(product, new PromotionProduct(product, promotion, tempProduct.quantity()));
+            products.put(tempProduct.name(), product);
         }
         return new Store(products, PromotionProducts);
     }
