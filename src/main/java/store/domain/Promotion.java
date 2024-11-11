@@ -10,7 +10,7 @@ public class Promotion {
     private final Period period;
 
     public Promotion(String name, int buyCount, int getCount, LocalDate startDate, LocalDate endDate) {
-        this.name = name;
+        this.name = name.trim();
         this.buyCount = buyCount;
         this.getCount = getCount;
         period = new Period(startDate, endDate);

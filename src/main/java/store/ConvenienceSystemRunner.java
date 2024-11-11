@@ -8,6 +8,7 @@ import static store.domain.PromotionNoticeType.NOT_APPLIED_QUANTITY;
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.util.List;
 import java.util.Map;
+import store.converter.StringToPromotionConverter;
 import store.domain.Answer;
 import store.domain.Promotion;
 import store.domain.PromotionNoticeResult;
@@ -38,7 +39,9 @@ public class ConvenienceSystemRunner {
 
     private Store initStore() {
         FileReader fileReader = new FileReader();
-        PromotionsInitializer promotionsInitializer = new PromotionsInitializer(fileReader);
+        PromotionsInitializer promotionsInitializer = new PromotionsInitializer(
+                fileReader,
+                new StringToPromotionConverter());
         Map<String, Promotion> promotions = promotionsInitializer.initialize();
         ProductsInitializer productsInitializer = new ProductsInitializer(fileReader);
         return productsInitializer.initialize(promotions);

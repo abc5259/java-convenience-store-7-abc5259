@@ -12,6 +12,7 @@ import store.domain.Store;
 public class ProductsInitializer {
 
     private static final Path PRODUCT_PATH = Path.of("src/main/resources/products.md");
+
     private final FileReader fileReader;
 
     public ProductsInitializer(FileReader fileReader) {
@@ -35,13 +36,12 @@ public class ProductsInitializer {
             if (promotionName.equals("null")) {
                 product.increaseQuantity(quantity);
                 products.put(productName, product);
+                continue;
             }
-            if (!promotionName.equals("null")) {
-                Promotion promotion = promotions.get(promotionName);
-                PromotionProduct PromotionProduct = new PromotionProduct(product, promotion, quantity);
-                PromotionProducts.put(product, PromotionProduct);
-                products.put(productName, product);
-            }
+
+            Promotion promotion = promotions.get(promotionName);
+            PromotionProducts.put(product, new PromotionProduct(product, promotion, quantity));
+            products.put(productName, product);
         }
         return new Store(products, PromotionProducts);
     }
