@@ -11,9 +11,20 @@ public class Promotion {
 
     public Promotion(String name, int buyCount, int getCount, LocalDate startDate, LocalDate endDate) {
         this.name = name.trim();
+        validate(buyCount, getCount);
         this.buyCount = buyCount;
         this.getCount = getCount;
         period = new Period(startDate, endDate);
+    }
+
+    private void validate(int buyCount, int getCount) {
+        if (buyCount <= 0) {
+            throw new IllegalArgumentException("buyCount는 0보다 커야합니다.");
+        }
+
+        if (getCount <= 0) {
+            throw new IllegalArgumentException("getCount는 0보다 커야합니다.");
+        }
     }
 
     public boolean isApplicable(LocalDate currentDate) {
