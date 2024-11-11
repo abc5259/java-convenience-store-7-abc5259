@@ -22,6 +22,7 @@ public class Product {
     }
 
     public void increaseQuantity(int quantity) {
+        validateQuantityIsNegative(quantity);
         this.quantity += quantity;
     }
 
