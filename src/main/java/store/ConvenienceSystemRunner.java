@@ -8,46 +8,33 @@ import static store.domain.PromotionNoticeType.NOT_APPLIED_QUANTITY;
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.util.List;
 import java.util.Map;
-import store.converter.StringToPromotionConverter;
-import store.converter.StringToTempProductConverter;
 import store.domain.Answer;
-import store.domain.Promotion;
 import store.domain.PromotionNoticeResult;
 import store.domain.PurchaseItem;
 import store.domain.Receipt;
 import store.domain.Store;
-import store.initializer.ProductsInitializer;
-import store.initializer.PromotionsInitializer;
-import store.io.FileReader;
+import store.initializer.ConvenienceSystemInitializer;
 import store.view.OutputView;
 
 public class ConvenienceSystemRunner {
+
+    private final ConvenienceSystemInitializer convenienceSystemInitializer;
     private final IteratorInputHandler iteratorInputHandler;
     private final OutputView outputView;
 
-    public ConvenienceSystemRunner(IteratorInputHandler iteratorInputHandler,
+    public ConvenienceSystemRunner(ConvenienceSystemInitializer convenienceSystemInitializer,
+                                   IteratorInputHandler iteratorInputHandler,
                                    OutputView outputView) {
+        this.convenienceSystemInitializer = convenienceSystemInitializer;
         this.iteratorInputHandler = iteratorInputHandler;
         this.outputView = outputView;
     }
 
     public void run() {
-        Store store = initStore();
+        Store store = convenienceSystemInitializer.initStore();
         do {
             processConvenienceSystem(store);
         } while ((iteratorInputHandler.inputMorePurchaseProducts()).toBoolean());
-    }
-
-    private Store initStore() {
-        FileReader fileReader = new FileReader();
-        PromotionsInitializer promotionsInitializer = new PromotionsInitializer(
-                fileReader,
-                new StringToPromotionConverter());
-        Map<String, Promotion> promotions = promotionsInitializer.initialize();
-        ProductsInitializer productsInitializer = new ProductsInitializer(
-                fileReader,
-                new StringToTempProductConverter());
-        return productsInitializer.initialize(promotions);
     }
 
     private void processConvenienceSystem(Store store) {
