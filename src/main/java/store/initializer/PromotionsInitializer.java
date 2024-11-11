@@ -1,4 +1,4 @@
-package store.io;
+package store.initializer;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import store.converter.StringToPromotionConverter;
 import store.domain.Promotion;
+import store.io.FileReader;
 
 public class PromotionsInitializer {
 
