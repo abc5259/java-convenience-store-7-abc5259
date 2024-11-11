@@ -21,22 +21,31 @@ public class StoreInitializer {
     public Store initialize() {
         Map<String, Product> products = new LinkedHashMap<>();
         Map<Product, PromotionProduct> PromotionProducts = new LinkedHashMap<>();
-
-        for (TempProduct tempProduct : tempProducts) {
-            Product product = products.getOrDefault(
-                    tempProduct.name(),
-                    new Product(tempProduct.name(), tempProduct.price()));
-
-            if (tempProduct.isNotPromotion()) {
-                product.increaseQuantity(tempProduct.quantity());
-                products.put(tempProduct.name(), product);
-                continue;
-            }
-
-            Promotion promotion = promotions.get(tempProduct.promotionName());
-            PromotionProducts.put(product, new PromotionProduct(product, promotion, tempProduct.quantity()));
-            products.put(tempProduct.name(), product);
-        }
+        init(products, PromotionProducts);
         return new Store(products, PromotionProducts);
+    }
+
+    private void init(Map<String, Product> products, Map<Product, PromotionProduct> PromotionProducts) {
+        for (TempProduct tempProduct : tempProducts) {
+            Product product = computeProducts(products, tempProduct);
+            computePromotionProducts(PromotionProducts, tempProduct, product);
+        }
+    }
+
+    private Product computeProducts(Map<String, Product> products, TempProduct tempProduct) {
+        return products.computeIfAbsent(
+                tempProduct.name(),
+                name -> new Product(name, tempProduct.price()));
+    }
+
+    private void computePromotionProducts(Map<Product, PromotionProduct> PromotionProducts, TempProduct tempProduct,
+                                          Product product) {
+        if (tempProduct.isNotPromotion()) {
+            product.increaseQuantity(tempProduct.quantity());
+            return;
+        }
+
+        Promotion promotion = promotions.get(tempProduct.promotionName());
+        PromotionProducts.put(product, new PromotionProduct(product, promotion, tempProduct.quantity()));
     }
 }
