@@ -69,20 +69,20 @@ Promotion
 - [x] 최종 결제 금액을 출력한다.
 
 ### 프로그래밍 요구 사항
-- [ ]else 예약어를 쓰지 않는다.
+- [x]else 예약어를 쓰지 않는다.
   - else를 쓰지 말라고 하니 switch/case로 구현하는 경우가 있는데 switch/case도 허용하지 않는다.
-- [ ] Java Enum을 적용하여 프로그램을 구현한다.
-- [ ] 구현한 기능에 대한 단위 테스트를 작성한다. 단, UI(System.out, System.in, Scanner) 로직은 제외한다.
-- [ ] 함수(또는 메서드)의 길이가 10라인을 넘어가지 않도록 구현한다.
-- [ ] 함수(또는 메서드)가 한 가지 일만 잘 하도록 구현한다.
-- [ ] 입출력을 담당하는 클래스를 별도로 구현한다.
-- [ ] InputView, OutputView 클래스를 참고하여 입출력 클래스를 구현한다.
+- [x] Java Enum을 적용하여 프로그램을 구현한다.
+- [x] 구현한 기능에 대한 단위 테스트를 작성한다. 단, UI(System.out, System.in, Scanner) 로직은 제외한다.
+- [x] 함수(또는 메서드)의 길이가 10라인을 넘어가지 않도록 구현한다.
+- [x] 함수(또는 메서드)가 한 가지 일만 잘 하도록 구현한다.
+- [x] 입출력을 담당하는 클래스를 별도로 구현한다.
+- [x] InputView, OutputView 클래스를 참고하여 입출력 클래스를 구현한다.
   - 클래스 이름, 메소드 반환 유형, 시그니처 등은 자유롭게 수정할 수 있다.
 
 ### 라이브러리
-- [ ] camp.nextstep.edu.missionutils에서 제공하는 DateTimes 및 Console API를 사용하여 구현한다.
-  - [ ] 현재 날짜와 시간을 가져오려면 camp.nextstep.edu.missionutils.DateTimes의 now()를 활용한다.
-- [ ] 사용자가 입력하는 값은 camp.nextstep.edu.missionutils.Console의 readLine()을 활용한다.
+- [x] camp.nextstep.edu.missionutils에서 제공하는 DateTimes 및 Console API를 사용하여 구현한다.
+  - [x] 현재 날짜와 시간을 가져오려면 camp.nextstep.edu.missionutils.DateTimes의 now()를 활용한다.
+- [x] 사용자가 입력하는 값은 camp.nextstep.edu.missionutils.Console의 readLine()을 활용한다.
 
 ## 실행 결과 예시
 ```markdown
