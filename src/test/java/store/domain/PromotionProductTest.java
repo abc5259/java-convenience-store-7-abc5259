@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import store.exception.NotEnoughQuantityException;
 
@@ -52,6 +53,42 @@ class PromotionProductTest {
         assertThatThrownBy(() -> promotionProduct.purchase(purchaseItem, APPLICABLE_PROMOTION_DATE))
                 .isInstanceOf(NotEnoughQuantityException.class);
     }
+
+    @Test
+    void 조정된_프로모션_재고_수량을_계산할때_구매하기_원하는_재고가_현재_재고보다_많은_경우_예외가_발생한다() {
+        //given
+        Promotion promotion = create_Buy_N_Free_Count_Promotion(2, 1);
+        Product product = new Product("콜라", 1000, 2);
+        PromotionProduct promotionProduct = new PromotionProduct(product, promotion, 3);
+
+        //when //then
+        assertThatThrownBy(() -> promotionProduct.calculateAdjustedPromotionQuantity(6, APPLICABLE_PROMOTION_DATE))
+                .isInstanceOf(NotEnoughQuantityException.class);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "2, 1, 4",
+            "1, 2, 4",
+            "5, 1, 9",
+            "4, 4, 9",
+            "3, 10, 14",
+    })
+    void 구매_수량이_재고_수량보다_많은_경우_예외가_발생한다(
+            int productQuantity,
+            int promotionQuantity,
+            int purchaseQuantity
+    ) {
+        //given
+        Promotion promotion = create_Buy_N_Free_Count_Promotion(2, 1);
+        Product product = new Product("콜라", 1000, productQuantity);
+        PromotionProduct promotionProduct = new PromotionProduct(product, promotion, promotionQuantity);
+
+        //when //then
+        assertThatThrownBy(() -> promotionProduct.validatePurchaseQuantity(purchaseQuantity))
+                .isInstanceOf(NotEnoughQuantityException.class);
+    }
+
 
     private static Stream<Arguments> createPurchaseProductArguments() {
         return Stream.of(
