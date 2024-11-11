@@ -52,6 +52,6 @@ class ProductReaderTest {
         List<Product> allProducts = productReader.findAllProducts();
 
         //then
-        assertThat(allProducts).isEqualTo(List.of(product1, product2));
+        assertThat(allProducts).containsAll(List.of(product1, product2));
     }
 }

@@ -27,8 +27,7 @@ public class PromotionProduct {
         validatePurchaseQuantity(purchaseQuantity);
         return promotion.calculateAdjustedPromotionQuantity(this.quantity, purchaseQuantity, now);
     }
-
-
+    
     public ProductPurchaseLog purchase(PurchaseItem purchaseItem, LocalDate purchaseDate) {
         validatePurchaseQuantity(purchaseItem.getPurchaseQuantity());
         if (isNotApplicablePromotion(purchaseDate)) {
